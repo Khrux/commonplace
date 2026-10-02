@@ -1,0 +1,83 @@
+{
+ "bastion_remnant": {
+  "height": 32,
+  "near_clip": false,
+  "offset_x": -16,
+  "offset_y": -16,
+  "texture_height": 32,
+  "texture_width": 32,
+  "width": 32
+ },
+ "desert_village": {
+  "height": 32,
+  "near_clip": true,
+  "offset_x": -16,
+  "offset_y": -16,
+  "texture_height": 32,
+  "texture_width": 32,
+  "width": 32
+ },
+ "end_city": {
+  "height": 64,
+  "near_clip": false,
+  "offset_x": -32,
+  "offset_y": -48,
+  "texture_height": 64,
+  "texture_width": 112,
+  "width": 64
+ },
+ "ocean_monument": {
+  "height": 32,
+  "near_clip": false,
+  "offset_x": -16,
+  "offset_y": -16,
+  "texture_height": 32,
+  "texture_width": 32,
+  "width": 32
+ },
+ "plains_village": {
+  "height": 32,
+  "near_clip": true,
+  "offset_x": -16,
+  "offset_y": -16,
+  "texture_height": 32,
+  "texture_width": 32,
+  "width": 32
+ },
+ "savanna_village": {
+  "height": 32,
+  "near_clip": true,
+  "offset_x": -16,
+  "offset_y": -16,
+  "texture_height": 32,
+  "texture_width": 32,
+  "width": 32
+ },
+ "snowy_village": {
+  "height": 32,
+  "near_clip": true,
+  "offset_x": -16,
+  "offset_y": -16,
+  "texture_height": 32,
+  "texture_width": 32,
+  "width": 32
+ },
+ "taiga_village": {
+  "height": 32,
+  "near_clip": true,
+  "offset_x": -16,
+  "offset_y": -16,
+  "texture_height": 32,
+  "texture_width": 32,
+  "width": 32
+ },
+ "woodland_mansion": {
+  "height": 32,
+  "near_clip": false,
+  "offset_x": -16,
+  "offset_y": -16,
+  "texture_height": 32,
+  "texture_width": 32,
+  "width": 32
+ }
+}

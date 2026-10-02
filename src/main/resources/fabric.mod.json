@@ -1,0 +1,42 @@
+{
+	"schemaVersion": 1,
+	"id": "handbook",
+	"version": "${version}",
+	"name": "Handbook",
+	"description": "One book for your recipes, the creatures you've met, the land you've mapped and your own notes, shared with whoever knows the passphrase.",
+	"authors": [
+		"khrux"
+	],
+	"license": "CC-BY-NC-SA-4.0",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.khrux.handbook.Handbook"
+		],
+		"client": [
+			"com.khrux.handbook.client.HandbookClient"
+		],
+		"fabric-datagen": [
+			"com.khrux.handbook.datagen.HandbookDataGenerator"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	},
+	"mixins": [
+		"handbook.mixins.json",
+		{
+			"config": "handbook.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"suggests": {
+		"fieldguide": "*"
+	},
+	"contributors": [
+		"Hunternif, tyra314 and Sisby folk (Antique Atlas art, LGPL-3.0-or-later)"
+	]
+}

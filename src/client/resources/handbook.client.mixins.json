@@ -1,0 +1,20 @@
+{
+	"required": true,
+	"package": "com.khrux.handbook.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"client": [
+		"AbstractRecipeBookScreenMixin",
+		"FirstPersonHandsAndItemsRendererMixin",
+		"TextureManagerMixin",
+		"PlayerMixin",
+		"MouseHandlerMixin",
+		"AbstractClientPlayerMixin",
+		"RecipeBookComponentAccessor"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

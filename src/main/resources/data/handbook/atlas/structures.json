@@ -1,0 +1,2785 @@
+{
+ "piece_types": {
+  "minecraft:iglu": {
+   "priority": 999,
+   "textures": [
+    "structure/igloo/igloo"
+   ]
+  },
+  "minecraft:nebcr": {
+   "priority": 80,
+   "textures": [
+    "structure/fortress/nether/nether_fortress_bridge_crossing"
+   ]
+  },
+  "minecraft:nebef": {
+   "priority": 90,
+   "textures": [
+    "structure/fortress/nether/nether_fortress_bridge_end_horizontal",
+    "structure/fortress/nether/nether_fortress_bridge_end_vertical"
+   ]
+  },
+  "minecraft:nebs": {
+   "priority": 100,
+   "textures": [
+    "structure/fortress/nether/nether_fortress_bridge_horizontal",
+    "structure/fortress/nether/nether_fortress_bridge_vertical"
+   ]
+  },
+  "minecraft:neccs": {
+   "priority": 70,
+   "textures": [
+    "structure/fortress/nether/nether_fortress_corridor"
+   ]
+  },
+  "minecraft:nece": {
+   "priority": 60,
+   "textures": [
+    "structure/fortress/nether/nether_fortress_corridor_exit"
+   ]
+  },
+  "minecraft:necsr": {
+   "priority": 50,
+   "textures": [
+    "structure/fortress/nether/nether_fortress_corridor_nether_warts_room"
+   ]
+  },
+  "minecraft:nectb": {
+   "priority": 70,
+   "textures": [
+    "structure/fortress/nether/nether_fortress_corridor"
+   ]
+  },
+  "minecraft:nemt": {
+   "priority": 40,
+   "textures": [
+    "structure/fortress/nether/nether_fortress_bridge_platform"
+   ]
+  },
+  "minecraft:nerc": {
+   "priority": 60,
+   "textures": [
+    "structure/fortress/nether/nether_fortress_bridge_small_crossing"
+   ]
+  },
+  "minecraft:nesc": {
+   "priority": 70,
+   "textures": [
+    "structure/fortress/nether/nether_fortress_corridor"
+   ]
+  },
+  "minecraft:nesclt": {
+   "priority": 70,
+   "textures": [
+    "structure/fortress/nether/nether_fortress_corridor"
+   ]
+  },
+  "minecraft:nescrt": {
+   "priority": 70,
+   "textures": [
+    "structure/fortress/nether/nether_fortress_corridor"
+   ]
+  },
+  "minecraft:nescsc": {
+   "priority": 70,
+   "textures": [
+    "structure/fortress/nether/nether_fortress_corridor"
+   ]
+  },
+  "minecraft:nesr": {
+   "priority": 50,
+   "textures": [
+    "structure/fortress/nether/nether_fortress_bridge_stairs"
+   ]
+  },
+  "minecraft:nestart": {
+   "priority": 70,
+   "textures": [
+    "structure/fortress/nether/nether_fortress_corridor"
+   ]
+  },
+  "minecraft:rupo": {
+   "priority": 999,
+   "textures": [
+    "structure/ruined_portal/ruined_portal"
+   ]
+  },
+  "minecraft:shipwreck": {
+   "priority": 999,
+   "textures": [
+    "structure/shipwreck/beached/shipwreck_beached"
+   ]
+  },
+  "minecraft:tedp": {
+   "priority": 999,
+   "textures": [
+    "structure/pyramid/desert/desert_pyramid"
+   ]
+  },
+  "minecraft:tejp": {
+   "priority": 999,
+   "textures": [
+    "structure/temple/jungle/jungle_temple"
+   ]
+  },
+  "minecraft:tesh": {
+   "priority": 999,
+   "textures": [
+    "structure/witch_hut/swamp/swamp_hut"
+   ]
+  }
+ },
+ "pieces": {
+  "minecraft:pillager_outpost/feature_cage1": {
+   "priority": 999,
+   "textures": [
+    "structure/outpost/cage"
+   ]
+  },
+  "minecraft:pillager_outpost/feature_cage2": {
+   "priority": 999,
+   "textures": [
+    "structure/outpost/cage"
+   ]
+  },
+  "minecraft:pillager_outpost/feature_cage_with_allays": {
+   "priority": 999,
+   "textures": [
+    "structure/outpost/cage"
+   ]
+  },
+  "minecraft:pillager_outpost/feature_tent1": {
+   "priority": 999,
+   "textures": [
+    "structure/outpost/tent"
+   ]
+  },
+  "minecraft:pillager_outpost/feature_tent2": {
+   "priority": 999,
+   "textures": [
+    "structure/outpost/tent"
+   ]
+  },
+  "minecraft:pillager_outpost/watchtower": {
+   "priority": 999,
+   "textures": [
+    "structure/outpost/watchtower"
+   ]
+  },
+  "minecraft:village/desert/desert_lamp_1": {
+   "priority": 1100,
+   "textures": [
+    "structure/village/desert/lamp"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_animal_pen_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/animal_pen"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_animal_pen_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/animal_pen"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_armorer_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/medium_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_butcher_shop_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/medium_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_cartographer_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/medium_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_farm_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_farm"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_farm_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_farm"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_fisher_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/medium_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_fletcher_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/large_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_large_farm_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/large_farm"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_library_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/medium_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_mason_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/medium_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_medium_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/medium_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_medium_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/large_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_shepherd_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/medium_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_small_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/small_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_small_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/small_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_small_house_3": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/small_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_small_house_4": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/small_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_small_house_5": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/small_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_small_house_6": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/tall_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_small_house_7": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/small_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_small_house_8": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/small_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_tannery_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/large_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_temple_1": {
+   "priority": 800,
+   "textures": [
+    "structure/village/desert/large_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_temple_2": {
+   "priority": 800,
+   "textures": [
+    "structure/village/desert/large_house"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_tool_smith_1": {
+   "priority": 800,
+   "textures": [
+    "structure/village/desert/weaponsmith"
+   ]
+  },
+  "minecraft:village/desert/houses/desert_weaponsmith_1": {
+   "priority": 800,
+   "textures": [
+    "structure/village/desert/weaponsmith"
+   ]
+  },
+  "minecraft:village/desert/streets/corner_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/desert/path_crossroad"
+   ]
+  },
+  "minecraft:village/desert/streets/corner_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/desert/path_crossroad"
+   ]
+  },
+  "minecraft:village/desert/streets/crossroad_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/desert/path_crossroad"
+   ]
+  },
+  "minecraft:village/desert/streets/crossroad_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/desert/path_crossroad"
+   ]
+  },
+  "minecraft:village/desert/streets/crossroad_03": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/desert/path_crossroad"
+   ]
+  },
+  "minecraft:village/desert/streets/square_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/desert/path_crossroad"
+   ]
+  },
+  "minecraft:village/desert/streets/square_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/desert/path_crossroad"
+   ]
+  },
+  "minecraft:village/desert/streets/straight_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/desert/path_horizontal",
+    "structure/village/desert/path_vertical"
+   ]
+  },
+  "minecraft:village/desert/streets/straight_02": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/desert/path_horizontal",
+    "structure/village/desert/path_vertical"
+   ]
+  },
+  "minecraft:village/desert/streets/straight_03": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/desert/path_horizontal",
+    "structure/village/desert/path_vertical"
+   ]
+  },
+  "minecraft:village/desert/streets/turn_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/desert/path_crossroad"
+   ]
+  },
+  "minecraft:village/desert/town_centers/desert_meeting_point_1": {
+   "priority": 900,
+   "textures": [
+    "structure/village/desert/fountain"
+   ]
+  },
+  "minecraft:village/desert/town_centers/desert_meeting_point_2": {
+   "priority": 900,
+   "textures": [
+    "structure/village/desert/well_covered"
+   ]
+  },
+  "minecraft:village/desert/town_centers/desert_meeting_point_3": {
+   "priority": 900,
+   "textures": [
+    "structure/village/desert/market_stalls"
+   ]
+  },
+  "minecraft:village/desert/zombie/houses/desert_medium_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/medium_house"
+   ]
+  },
+  "minecraft:village/desert/zombie/houses/desert_medium_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/large_house"
+   ]
+  },
+  "minecraft:village/desert/zombie/houses/desert_small_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/small_house"
+   ]
+  },
+  "minecraft:village/desert/zombie/houses/desert_small_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/small_house"
+   ]
+  },
+  "minecraft:village/desert/zombie/houses/desert_small_house_3": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/small_house"
+   ]
+  },
+  "minecraft:village/desert/zombie/houses/desert_small_house_4": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/small_house"
+   ]
+  },
+  "minecraft:village/desert/zombie/houses/desert_small_house_5": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/small_house"
+   ]
+  },
+  "minecraft:village/desert/zombie/houses/desert_small_house_6": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/tall_house"
+   ]
+  },
+  "minecraft:village/desert/zombie/houses/desert_small_house_7": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/small_house"
+   ]
+  },
+  "minecraft:village/desert/zombie/houses/desert_small_house_8": {
+   "priority": 999,
+   "textures": [
+    "structure/village/desert/small_house"
+   ]
+  },
+  "minecraft:village/desert/zombie/streets/corner_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/desert/path_crossroad"
+   ]
+  },
+  "minecraft:village/desert/zombie/streets/corner_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/desert/path_crossroad"
+   ]
+  },
+  "minecraft:village/desert/zombie/streets/crossroad_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/desert/path_crossroad"
+   ]
+  },
+  "minecraft:village/desert/zombie/streets/crossroad_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/desert/path_crossroad"
+   ]
+  },
+  "minecraft:village/desert/zombie/streets/crossroad_03": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/desert/path_crossroad"
+   ]
+  },
+  "minecraft:village/desert/zombie/streets/square_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/desert/path_crossroad"
+   ]
+  },
+  "minecraft:village/desert/zombie/streets/square_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/desert/path_crossroad"
+   ]
+  },
+  "minecraft:village/desert/zombie/streets/straight_01": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/desert/path_horizontal",
+    "structure/village/desert/path_vertical"
+   ]
+  },
+  "minecraft:village/desert/zombie/streets/straight_02": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/desert/path_horizontal",
+    "structure/village/desert/path_vertical"
+   ]
+  },
+  "minecraft:village/desert/zombie/streets/straight_03": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/desert/path_horizontal",
+    "structure/village/desert/path_vertical"
+   ]
+  },
+  "minecraft:village/desert/zombie/streets/turn_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/desert/path_crossroad"
+   ]
+  },
+  "minecraft:village/desert/zombie/town_centers/desert_meeting_point_1": {
+   "priority": 900,
+   "textures": [
+    "structure/village/desert/fountain"
+   ]
+  },
+  "minecraft:village/desert/zombie/town_centers/desert_meeting_point_2": {
+   "priority": 900,
+   "textures": [
+    "structure/village/desert/well_covered"
+   ]
+  },
+  "minecraft:village/desert/zombie/town_centers/desert_meeting_point_3": {
+   "priority": 900,
+   "textures": [
+    "structure/village/desert/market_stalls"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_animal_pen_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/animal_pen"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_animal_pen_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/animal_pen"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_animal_pen_3": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/animal_pen"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_armorer_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/medium_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_big_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/tall_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_butcher_shop_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/butcher_shop"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_butcher_shop_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/tall_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_cartographer_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_fisher_cottage_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_fletcher_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/large_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_large_farm_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/large_farm"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_library_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/large_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_library_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/tall_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_masons_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/medium_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_medium_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/medium_house_t"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_medium_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/double_arch_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_meeting_point_4": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/market_stalls"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_meeting_point_5": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/market_stalls"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_shepherds_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/double_arch_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_small_farm_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_farm"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_small_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_small_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_small_house_3": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_small_house_4": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_small_house_5": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/tall_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_small_house_6": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_small_house_7": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_small_house_8": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_stable_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/butcher_shop"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_stable_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/double_arch_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_tannery_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/butcher_shop"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_temple_3": {
+   "priority": 800,
+   "textures": [
+    "structure/village/plains/double_arch_house"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_temple_4": {
+   "priority": 800,
+   "textures": [
+    "structure/village/plains/temple"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_tool_smith_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/medium_house_t"
+   ]
+  },
+  "minecraft:village/plains/houses/plains_weaponsmith_1": {
+   "priority": 800,
+   "textures": [
+    "structure/village/plains/weaponsmith"
+   ]
+  },
+  "minecraft:village/plains/plains_lamp_1": {
+   "priority": 1100,
+   "textures": [
+    "structure/village/plains/lamp"
+   ]
+  },
+  "minecraft:village/plains/streets/corner_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/streets/corner_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/streets/corner_03": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/streets/crossroad_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/streets/crossroad_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/streets/crossroad_03": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/streets/crossroad_04": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/streets/crossroad_05": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/streets/crossroad_06": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/streets/straight_01": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/plains/streets/straight_02": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/plains/streets/straight_03": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/plains/streets/straight_04": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/plains/streets/straight_05": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/plains/streets/straight_06": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/plains/streets/turn_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/town_centers/plains_fountain_01": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/well"
+   ]
+  },
+  "minecraft:village/plains/town_centers/plains_meeting_point_1": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/well_covered"
+   ]
+  },
+  "minecraft:village/plains/town_centers/plains_meeting_point_2": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/market_stalls"
+   ]
+  },
+  "minecraft:village/plains/town_centers/plains_meeting_point_3": {
+   "priority": 900,
+   "textures": [
+    "structure/village/savanna/loose_farm"
+   ]
+  },
+  "minecraft:village/plains/zombie/houses/plains_animal_pen_3": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/animal_pen"
+   ]
+  },
+  "minecraft:village/plains/zombie/houses/plains_big_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/tall_house"
+   ]
+  },
+  "minecraft:village/plains/zombie/houses/plains_butcher_shop_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/butcher_shop"
+   ]
+  },
+  "minecraft:village/plains/zombie/houses/plains_fletcher_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_house"
+   ]
+  },
+  "minecraft:village/plains/zombie/houses/plains_medium_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/medium_house_t"
+   ]
+  },
+  "minecraft:village/plains/zombie/houses/plains_medium_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/double_arch_house"
+   ]
+  },
+  "minecraft:village/plains/zombie/houses/plains_meeting_point_4": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/market_stalls"
+   ]
+  },
+  "minecraft:village/plains/zombie/houses/plains_meeting_point_5": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/market_stalls"
+   ]
+  },
+  "minecraft:village/plains/zombie/houses/plains_shepherds_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/large_house"
+   ]
+  },
+  "minecraft:village/plains/zombie/houses/plains_small_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_house"
+   ]
+  },
+  "minecraft:village/plains/zombie/houses/plains_small_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_house"
+   ]
+  },
+  "minecraft:village/plains/zombie/houses/plains_small_house_3": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_house"
+   ]
+  },
+  "minecraft:village/plains/zombie/houses/plains_small_house_4": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_house"
+   ]
+  },
+  "minecraft:village/plains/zombie/houses/plains_small_house_5": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/tall_house"
+   ]
+  },
+  "minecraft:village/plains/zombie/houses/plains_small_house_6": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_house"
+   ]
+  },
+  "minecraft:village/plains/zombie/houses/plains_small_house_7": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_house"
+   ]
+  },
+  "minecraft:village/plains/zombie/houses/plains_small_house_8": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_house"
+   ]
+  },
+  "minecraft:village/plains/zombie/houses/plains_stable_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/butcher_shop"
+   ]
+  },
+  "minecraft:village/plains/zombie/streets/corner_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/zombie/streets/corner_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/zombie/streets/corner_03": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/zombie/streets/crossroad_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/zombie/streets/crossroad_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/zombie/streets/crossroad_03": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/zombie/streets/crossroad_04": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/zombie/streets/crossroad_05": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/zombie/streets/crossroad_06": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/zombie/streets/straight_01": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/plains/zombie/streets/straight_02": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/plains/zombie/streets/straight_03": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/plains/zombie/streets/straight_04": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/plains/zombie/streets/straight_05": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/plains/zombie/streets/straight_06": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/plains/zombie/streets/turn_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/plains/zombie/town_centers/plains_fountain_01": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/well"
+   ]
+  },
+  "minecraft:village/plains/zombie/town_centers/plains_meeting_point_1": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/well_covered"
+   ]
+  },
+  "minecraft:village/plains/zombie/town_centers/plains_meeting_point_2": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/market_stalls"
+   ]
+  },
+  "minecraft:village/plains/zombie/town_centers/plains_meeting_point_3": {
+   "priority": 900,
+   "textures": [
+    "structure/village/savanna/loose_farm"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_animal_pen_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/animal_pen"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_animal_pen_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/animal_pen"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_animal_pen_3": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/animal_pen"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_armorer_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/flat_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_butchers_shop_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/flat_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_butchers_shop_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/flat_house_stilts"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_cartographer_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/flat_house_stilts"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_fisher_cottage_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/flat_house_stilts"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_fletcher_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/flat_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_large_farm_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/large_farm"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_large_farm_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/loose_farm"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_library_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/flat_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_mason_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/flat_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_medium_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/double_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_medium_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/double_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_shepherd_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/small_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_small_farm": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/loose_farm"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_small_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/small_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_small_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/small_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_small_house_3": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/small_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_small_house_4": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/small_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_small_house_5": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/small_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_small_house_6": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/small_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_small_house_7": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/small_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_small_house_8": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/small_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_tannery_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/flat_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_temple_1": {
+   "priority": 800,
+   "textures": [
+    "structure/village/savanna/flat_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_temple_2": {
+   "priority": 800,
+   "textures": [
+    "structure/village/savanna/flat_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_tool_smith_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/flat_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_weaponsmith_1": {
+   "priority": 800,
+   "textures": [
+    "structure/village/savanna/flat_house"
+   ]
+  },
+  "minecraft:village/savanna/houses/savanna_weaponsmith_2": {
+   "priority": 800,
+   "textures": [
+    "structure/village/savanna/flat_house"
+   ]
+  },
+  "minecraft:village/savanna/savanna_lamp_post_01": {
+   "priority": 1100,
+   "textures": [
+    "structure/village/savanna/lamp"
+   ]
+  },
+  "minecraft:village/savanna/streets/corner_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/streets/corner_03": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/streets/crossroad_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/streets/crossroad_03": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/streets/crossroad_04": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/streets/crossroad_05": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/streets/crossroad_06": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/streets/crossroad_07": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/streets/split_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/streets/split_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/streets/straight_02": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/savanna/streets/straight_04": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/savanna/streets/straight_05": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/savanna/streets/straight_06": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/savanna/streets/straight_08": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/savanna/streets/straight_09": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/savanna/streets/straight_10": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/savanna/streets/straight_11": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/savanna/streets/turn_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/town_centers/savanna_meeting_point_1": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/market_stalls"
+   ]
+  },
+  "minecraft:village/savanna/town_centers/savanna_meeting_point_2": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/fountain"
+   ]
+  },
+  "minecraft:village/savanna/town_centers/savanna_meeting_point_3": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/well_covered"
+   ]
+  },
+  "minecraft:village/savanna/town_centers/savanna_meeting_point_4": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/well_covered"
+   ]
+  },
+  "minecraft:village/savanna/zombie/houses/savanna_animal_pen_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/animal_pen"
+   ]
+  },
+  "minecraft:village/savanna/zombie/houses/savanna_animal_pen_3": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/animal_pen"
+   ]
+  },
+  "minecraft:village/savanna/zombie/houses/savanna_large_farm_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/loose_farm"
+   ]
+  },
+  "minecraft:village/savanna/zombie/houses/savanna_medium_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/double_house"
+   ]
+  },
+  "minecraft:village/savanna/zombie/houses/savanna_medium_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/double_house"
+   ]
+  },
+  "minecraft:village/savanna/zombie/houses/savanna_small_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/small_house"
+   ]
+  },
+  "minecraft:village/savanna/zombie/houses/savanna_small_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/small_house"
+   ]
+  },
+  "minecraft:village/savanna/zombie/houses/savanna_small_house_3": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/small_house"
+   ]
+  },
+  "minecraft:village/savanna/zombie/houses/savanna_small_house_4": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/small_house"
+   ]
+  },
+  "minecraft:village/savanna/zombie/houses/savanna_small_house_5": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/small_house"
+   ]
+  },
+  "minecraft:village/savanna/zombie/houses/savanna_small_house_6": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/small_house"
+   ]
+  },
+  "minecraft:village/savanna/zombie/houses/savanna_small_house_7": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/small_house"
+   ]
+  },
+  "minecraft:village/savanna/zombie/houses/savanna_small_house_8": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/small_house"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/corner_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/corner_03": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/crossroad_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/crossroad_03": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/crossroad_04": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/crossroad_05": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/crossroad_06": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/crossroad_07": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/split_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/split_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/straight_02": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/straight_04": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/straight_05": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/straight_06": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/straight_08": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/straight_09": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/straight_10": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/straight_11": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/savanna/zombie/streets/turn_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/savanna/zombie/town_centers/savanna_meeting_point_1": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/market_stalls"
+   ]
+  },
+  "minecraft:village/savanna/zombie/town_centers/savanna_meeting_point_2": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/fountain"
+   ]
+  },
+  "minecraft:village/savanna/zombie/town_centers/savanna_meeting_point_3": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/well_covered"
+   ]
+  },
+  "minecraft:village/savanna/zombie/town_centers/savanna_meeting_point_4": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/well_covered"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_animal_pen_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/animal_pen"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_animal_pen_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/animal_pen"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_armorer_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/small_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_armorer_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/small_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_butchers_shop_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/small_house_snowy"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_butchers_shop_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/igloo_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_cartographer_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/large_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_farm_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_farm"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_farm_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/loose_farm"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_fisher_cottage": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/small_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_fletcher_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/small_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_library_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/large_house_snowy"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_masons_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/large_house_snowy"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_masons_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/large_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_medium_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/igloo_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_medium_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/large_house_snowy"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_medium_house_3": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/igloo_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_shepherds_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/large_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_small_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/igloo_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_small_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/small_house_snowy"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_small_house_3": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/small_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_small_house_4": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/igloo_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_small_house_5": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/igloo_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_small_house_6": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/small_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_small_house_7": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/small_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_small_house_8": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/igloo_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_tannery_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/large_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_temple_1": {
+   "priority": 800,
+   "textures": [
+    "structure/village/snowy/large_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_tool_smith_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/large_house"
+   ]
+  },
+  "minecraft:village/snowy/houses/snowy_weapon_smith_1": {
+   "priority": 800,
+   "textures": [
+    "structure/village/snowy/large_house"
+   ]
+  },
+  "minecraft:village/snowy/snowy_lamp_post_01": {
+   "priority": 1100,
+   "textures": [
+    "structure/village/snowy/lamp"
+   ]
+  },
+  "minecraft:village/snowy/snowy_lamp_post_02": {
+   "priority": 1100,
+   "textures": [
+    "structure/village/snowy/lamp"
+   ]
+  },
+  "minecraft:village/snowy/snowy_lamp_post_03": {
+   "priority": 1100,
+   "textures": [
+    "structure/village/snowy/lamp"
+   ]
+  },
+  "minecraft:village/snowy/streets/corner_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/streets/corner_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/streets/corner_03": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/streets/crossroad_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/streets/crossroad_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/streets/crossroad_03": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/streets/crossroad_04": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/streets/crossroad_05": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/streets/crossroad_06": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/streets/square_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/streets/straight_01": {
+   "priority": 999,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/snowy/streets/straight_02": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/snowy/streets/straight_03": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/snowy/streets/straight_04": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/snowy/streets/straight_06": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/snowy/streets/straight_08": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/snowy/streets/turn_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/town_centers/snowy_meeting_point_1": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/fountain"
+   ]
+  },
+  "minecraft:village/snowy/town_centers/snowy_meeting_point_2": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/well"
+   ]
+  },
+  "minecraft:village/snowy/town_centers/snowy_meeting_point_3": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/well_covered"
+   ]
+  },
+  "minecraft:village/snowy/zombie/houses/snowy_medium_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/igloo_house"
+   ]
+  },
+  "minecraft:village/snowy/zombie/houses/snowy_medium_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/large_house_snowy"
+   ]
+  },
+  "minecraft:village/snowy/zombie/houses/snowy_medium_house_3": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/igloo_house"
+   ]
+  },
+  "minecraft:village/snowy/zombie/houses/snowy_small_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/igloo_house"
+   ]
+  },
+  "minecraft:village/snowy/zombie/houses/snowy_small_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/small_house_snowy"
+   ]
+  },
+  "minecraft:village/snowy/zombie/houses/snowy_small_house_3": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/small_house"
+   ]
+  },
+  "minecraft:village/snowy/zombie/houses/snowy_small_house_4": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/igloo_house"
+   ]
+  },
+  "minecraft:village/snowy/zombie/houses/snowy_small_house_5": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/igloo_house"
+   ]
+  },
+  "minecraft:village/snowy/zombie/houses/snowy_small_house_6": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/small_house"
+   ]
+  },
+  "minecraft:village/snowy/zombie/houses/snowy_small_house_7": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/small_house"
+   ]
+  },
+  "minecraft:village/snowy/zombie/houses/snowy_small_house_8": {
+   "priority": 999,
+   "textures": [
+    "structure/village/snowy/igloo_house"
+   ]
+  },
+  "minecraft:village/snowy/zombie/streets/corner_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/zombie/streets/corner_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/zombie/streets/corner_03": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/zombie/streets/crossroad_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/zombie/streets/crossroad_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/zombie/streets/crossroad_03": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/zombie/streets/crossroad_04": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/zombie/streets/crossroad_05": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/zombie/streets/crossroad_06": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/zombie/streets/square_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/zombie/streets/straight_01": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/snowy/zombie/streets/straight_02": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/snowy/zombie/streets/straight_03": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/snowy/zombie/streets/straight_04": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/snowy/zombie/streets/straight_06": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/snowy/zombie/streets/straight_08": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/snowy/zombie/streets/turn_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/snowy/zombie/town_centers/snowy_meeting_point_1": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/fountain"
+   ]
+  },
+  "minecraft:village/snowy/zombie/town_centers/snowy_meeting_point_2": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/well"
+   ]
+  },
+  "minecraft:village/snowy/zombie/town_centers/snowy_meeting_point_3": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/well_covered"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_animal_pen_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/animal_pen"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_armorer_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/shed"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_armorer_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/small_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_butcher_shop_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/butcher_shop"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_cartographer_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/tall_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_fisher_cottage_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/small_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_fletcher_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/small_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_large_farm_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/loose_farm"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_large_farm_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/loose_farm"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_library_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/large_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_masons_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/small_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_medium_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/tall_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_medium_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/tall_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_medium_house_3": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/double_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_medium_house_4": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/small_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_shepherds_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/double_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_small_farm_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/plains/small_farm"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_small_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/small_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_small_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/small_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_small_house_3": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/small_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_small_house_4": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/small_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_small_house_5": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/small_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_tannery_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/large_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_temple_1": {
+   "priority": 800,
+   "textures": [
+    "structure/village/plains/temple"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_tool_smith_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/large_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_weaponsmith_1": {
+   "priority": 800,
+   "textures": [
+    "structure/village/taiga/tall_house"
+   ]
+  },
+  "minecraft:village/taiga/houses/taiga_weaponsmith_2": {
+   "priority": 800,
+   "textures": [
+    "structure/village/taiga/shed"
+   ]
+  },
+  "minecraft:village/taiga/streets/corner_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/streets/corner_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/streets/corner_03": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/streets/crossroad_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/streets/crossroad_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/streets/crossroad_03": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/streets/crossroad_04": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/streets/crossroad_05": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/streets/crossroad_06": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/streets/straight_01": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/taiga/streets/straight_02": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/taiga/streets/straight_03": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/taiga/streets/straight_04": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/taiga/streets/straight_05": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/taiga/streets/straight_06": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/taiga/streets/turn_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/taiga_decoration_5": {
+   "priority": 1100,
+   "textures": [
+    "structure/village/taiga/lamp"
+   ]
+  },
+  "minecraft:village/taiga/taiga_decoration_6": {
+   "priority": 1100,
+   "textures": [
+    "structure/village/taiga/lamp"
+   ]
+  },
+  "minecraft:village/taiga/taiga_lamp_post_1": {
+   "priority": 1100,
+   "textures": [
+    "structure/village/savanna/lamp"
+   ]
+  },
+  "minecraft:village/taiga/town_centers/taiga_meeting_point_1": {
+   "priority": 900,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/town_centers/taiga_meeting_point_2": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/well_covered"
+   ]
+  },
+  "minecraft:village/taiga/zombie/houses/taiga_cartographer_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/tall_house"
+   ]
+  },
+  "minecraft:village/taiga/zombie/houses/taiga_fisher_cottage_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/small_house"
+   ]
+  },
+  "minecraft:village/taiga/zombie/houses/taiga_large_farm_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/savanna/loose_farm"
+   ]
+  },
+  "minecraft:village/taiga/zombie/houses/taiga_library_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/large_house"
+   ]
+  },
+  "minecraft:village/taiga/zombie/houses/taiga_medium_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/tall_house"
+   ]
+  },
+  "minecraft:village/taiga/zombie/houses/taiga_medium_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/tall_house"
+   ]
+  },
+  "minecraft:village/taiga/zombie/houses/taiga_medium_house_3": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/double_house"
+   ]
+  },
+  "minecraft:village/taiga/zombie/houses/taiga_medium_house_4": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/small_house"
+   ]
+  },
+  "minecraft:village/taiga/zombie/houses/taiga_shepherds_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/double_house"
+   ]
+  },
+  "minecraft:village/taiga/zombie/houses/taiga_small_house_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/small_house"
+   ]
+  },
+  "minecraft:village/taiga/zombie/houses/taiga_small_house_2": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/small_house"
+   ]
+  },
+  "minecraft:village/taiga/zombie/houses/taiga_small_house_3": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/small_house"
+   ]
+  },
+  "minecraft:village/taiga/zombie/houses/taiga_small_house_4": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/small_house"
+   ]
+  },
+  "minecraft:village/taiga/zombie/houses/taiga_small_house_5": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/small_house"
+   ]
+  },
+  "minecraft:village/taiga/zombie/houses/taiga_temple_1": {
+   "priority": 800,
+   "textures": [
+    "structure/village/plains/temple"
+   ]
+  },
+  "minecraft:village/taiga/zombie/houses/taiga_tool_smith_1": {
+   "priority": 999,
+   "textures": [
+    "structure/village/taiga/large_house"
+   ]
+  },
+  "minecraft:village/taiga/zombie/houses/taiga_weaponsmith_2": {
+   "priority": 800,
+   "textures": [
+    "structure/village/taiga/shed"
+   ]
+  },
+  "minecraft:village/taiga/zombie/streets/corner_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/zombie/streets/corner_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/zombie/streets/corner_03": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/zombie/streets/crossroad_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/zombie/streets/crossroad_02": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/zombie/streets/crossroad_03": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/zombie/streets/crossroad_04": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/zombie/streets/crossroad_05": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/zombie/streets/crossroad_06": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/zombie/streets/straight_01": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/taiga/zombie/streets/straight_02": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/taiga/zombie/streets/straight_03": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/taiga/zombie/streets/straight_04": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/taiga/zombie/streets/straight_05": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/taiga/zombie/streets/straight_06": {
+   "priority": 1060,
+   "textures": [
+    "structure/village/path_horizontal",
+    "structure/village/path_vertical"
+   ]
+  },
+  "minecraft:village/taiga/zombie/streets/turn_01": {
+   "priority": 1050,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/zombie/town_centers/taiga_meeting_point_1": {
+   "priority": 900,
+   "textures": [
+    "structure/village/path_crossroad"
+   ]
+  },
+  "minecraft:village/taiga/zombie/town_centers/taiga_meeting_point_2": {
+   "priority": 900,
+   "textures": [
+    "structure/village/plains/well_covered"
+   ]
+  }
+ },
+ "starts": {
+  "minecraft:bastion_remnant": {
+   "marker": "bastion_remnant"
+  },
+  "minecraft:village_desert": {
+   "marker": "desert_village"
+  },
+  "minecraft:village_plains": {
+   "marker": "plains_village"
+  },
+  "minecraft:village_savanna": {
+   "marker": "savanna_village"
+  },
+  "minecraft:village_snowy": {
+   "marker": "snowy_village"
+  },
+  "minecraft:village_taiga": {
+   "marker": "taiga_village"
+  }
+ },
+ "tags": {
+  "minecraft:village": {
+   "marker": "plains_village"
+  }
+ },
+ "types": {
+  "minecraft:end_city": {
+   "marker": "end_city"
+  },
+  "minecraft:nether_fossil": {
+   "priority": 999,
+   "textures": [
+    "structure/fossil/nether/nether_fossil",
+    "structure/fossil/nether/nether_fossil_2"
+   ]
+  },
+  "minecraft:ocean_monument": {
+   "marker": "ocean_monument"
+  },
+  "minecraft:woodland_mansion": {
+   "marker": "woodland_mansion"
+  }
+ }
+}
