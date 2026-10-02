@@ -18,6 +18,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -183,6 +184,25 @@ public class HandbookScreen extends Screen {
 			graphics.fill(seam - i - 1, this.top + 19, seam - i, this.top + 185, color);
 			graphics.fill(seam + i, this.top + 19, seam + i + 1, this.top + 185, color);
 		}
+	}
+
+	@Override
+	public boolean mouseClicked(final MouseButtonEvent event, final boolean doubleClick) {
+		if (this.ender != null) {
+			this.ender.mouseClicked(event);
+		}
+
+		return super.mouseClicked(event, doubleClick);
+	}
+
+	@Override
+	public boolean mouseDragged(final MouseButtonEvent event, final double dx, final double dy) {
+		return this.ender != null && this.ender.mouseDragged(event) || super.mouseDragged(event, dx, dy);
+	}
+
+	@Override
+	public boolean mouseReleased(final MouseButtonEvent event) {
+		return this.ender != null && this.ender.mouseReleased(event) || super.mouseReleased(event);
 	}
 
 	@Override

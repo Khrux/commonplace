@@ -6,6 +6,7 @@ import com.khrux.handbook.network.protocol.PassphraseSettingsPayload;
 import com.khrux.handbook.network.protocol.PassphraseSlotsPayload;
 import com.khrux.handbook.network.protocol.SharePlainInkPayload;
 import com.khrux.handbook.network.protocol.SheenPayload;
+import com.khrux.handbook.network.protocol.SwapPassphraseSlotsPayload;
 import com.khrux.handbook.world.entity.player.HandbookAttachmentTypes;
 import com.khrux.handbook.world.entity.player.PassphraseSlot;
 import com.khrux.handbook.world.level.atlas.AtlasTracker;
@@ -50,11 +51,13 @@ public class Syndication {
 		PayloadTypeRegistry.serverboundPlay().register(FollowPassphrasePayload.TYPE, FollowPassphrasePayload.STREAM_CODEC);
 		PayloadTypeRegistry.serverboundPlay().register(PassphraseSettingsPayload.TYPE, PassphraseSettingsPayload.STREAM_CODEC);
 		PayloadTypeRegistry.serverboundPlay().register(SharePlainInkPayload.TYPE, SharePlainInkPayload.STREAM_CODEC);
+		PayloadTypeRegistry.serverboundPlay().register(SwapPassphraseSlotsPayload.TYPE, SwapPassphraseSlotsPayload.STREAM_CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(FollowPassphrasePayload.TYPE, (payload, context) -> follow(context.player(), payload.slot(), payload.hash()));
 		ServerPlayNetworking.registerGlobalReceiver(
 			PassphraseSettingsPayload.TYPE, (payload, context) -> changeSettings(context.player(), payload.slot(), payload.color(), payload.enderInk())
 		);
 		ServerPlayNetworking.registerGlobalReceiver(SharePlainInkPayload.TYPE, (payload, context) -> sharePlainInk(context.player(), payload.slot()));
+		ServerPlayNetworking.registerGlobalReceiver(SwapPassphraseSlotsPayload.TYPE, (payload, context) -> swap(context.player(), payload.first(), payload.second()));
 		ServerTickEvents.END_SERVER_TICK.register(Syndication::tick);
 		ServerPlayConnectionEvents.JOIN.register((listener, sender, server) -> join(listener.player));
 		ServerPlayConnectionEvents.DISCONNECT.register((listener, server) -> disconnect(listener.player));
@@ -281,6 +284,23 @@ public class Syndication {
 		}
 
 		sendSlots(player);
+	}
+
+	static void swap(final ServerPlayer player, final int first, final int second) {
+		if (first < 0 || second < 0 || first >= PassphraseSlot.SLOTS || second >= PassphraseSlot.SLOTS || first == second) {
+			return;
+		}
+
+		List<PassphraseSlot> slots = new ArrayList<>(getSlots(player));
+		PassphraseSlot moved = slots.get(first);
+		slots.set(first, slots.get(second));
+		slots.set(second, moved);
+		player.setAttached(HandbookAttachmentTypes.PASSPHRASE_SLOTS, List.copyOf(slots));
+		sendSlots(player);
+		sendAllSheen(player);
+		if (isActive(player)) {
+			PassphraseNotebooks.sendAll(player);
+		}
 	}
 
 	static void sharePlainInk(final ServerPlayer player, final int index) {

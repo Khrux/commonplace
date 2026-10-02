@@ -50,6 +50,7 @@ public class FieldGuideTab {
 		ClientConfig.get().showInventoryButton = false;
 		ClientConfig.get().showPauseMenuButton = false;
 		if (screen instanceof BookScreen) {
+			FieldGuideBook.apply(minecraft);
 			ClientFieldGuideManager.getCategories().values().removeIf(category -> category.getId().getPath().equals("intro"));
 		}
 	}

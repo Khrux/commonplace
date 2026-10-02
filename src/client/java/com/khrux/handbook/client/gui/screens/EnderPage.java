@@ -19,6 +19,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.PageButton;
 import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -31,11 +32,22 @@ public class EnderPage {
 	private static final int PUPIL_COLOR = 0xFFD8FFF4;
 	private static final int OPTION_HOLLOW_COLOR = 0xFFB2B0AA;
 	private static final int FOLLOWER_ROWS = 10;
+	private static final int TABS_TOP = 20;
+	private static final int TAB_SPACING = 25;
+	private static final int TAB_HEIGHT = 24;
+	private static final int TAB_REACH = 20;
+	private static final double DRAG_START = 4.0;
 	private static final Identifier PAGE_LOCATION = Handbook.id("textures/gui/ender_page.png");
 	private static final Identifier PASSPHRASE_ICON = Handbook.id("textures/gui/icon/passphrase.png");
 	private static final String[] DRAFTS = new String[PassphraseSlot.SLOTS];
 	private static int selected;
 	private static int followerPage;
+	private static int pressedSlot = -1;
+	private static double pressX;
+	private static double pressY;
+	private static boolean dragging;
+	private static double dragX;
+	private static double dragY;
 	private final Font font = Minecraft.getInstance().font;
 	private final HandbookScreen screen;
 	private final int left;
@@ -72,7 +84,7 @@ public class EnderPage {
 			PassphraseSlot slot = ClientPassphrases.get(i).slot();
 			int index = i;
 			widgets.accept(HandbookTabButton.passphrase(
-				this.left + HandbookScreen.COVER_LEFT, this.top + 20 + i * 25, i == selected, true, PASSPHRASE_ICON, getSlotColor(slot), getPullOut(slot), () -> {
+				this.left + HandbookScreen.COVER_LEFT, this.top + TABS_TOP + i * TAB_SPACING, i == selected, true, PASSPHRASE_ICON, getSlotColor(slot), getPullOut(slot), () -> {
 					selected = index;
 					followerPage = 0;
 					this.screen.rebuild();
@@ -168,12 +180,88 @@ public class EnderPage {
 		this.passphraseBox.setTextColor(EnderInk.color(this.left + 27, this.top + 51));
 	}
 
+	private int slotAt(final double x, final double y) {
+		int tabLeft = this.left + HandbookScreen.COVER_LEFT - TAB_REACH;
+		int offset = (int)Math.floor(y - this.top - TABS_TOP);
+		if (x < tabLeft || x >= this.left + HandbookScreen.COVER_LEFT + 8 || offset < 0) {
+			return -1;
+		}
+
+		int index = offset / TAB_SPACING;
+		return index < PassphraseSlot.SLOTS && offset % TAB_SPACING < TAB_HEIGHT ? index : -1;
+	}
+
+	public void mouseClicked(final MouseButtonEvent event) {
+		int index = event.button() == InputConstants.MOUSE_BUTTON_LEFT ? this.slotAt(event.x(), event.y()) : -1;
+		pressedSlot = index;
+		pressX = event.x();
+		pressY = event.y();
+		dragging = false;
+	}
+
+	public boolean mouseDragged(final MouseButtonEvent event) {
+		if (pressedSlot < 0) {
+			return false;
+		}
+
+		if (!dragging && Math.abs(event.x() - pressX) + Math.abs(event.y() - pressY) > DRAG_START) {
+			dragging = true;
+		}
+
+		dragX = event.x();
+		dragY = event.y();
+		return dragging;
+	}
+
+	public boolean mouseReleased(final MouseButtonEvent event) {
+		int from = pressedSlot;
+		boolean dropped = dragging;
+		pressedSlot = -1;
+		dragging = false;
+		if (from < 0 || !dropped) {
+			return false;
+		}
+
+		int to = this.slotAt(event.x(), event.y());
+		if (to >= 0 && to != from) {
+			ClientPassphrases.swap(from, to);
+			String draft = DRAFTS[from];
+			DRAFTS[from] = DRAFTS[to];
+			DRAFTS[to] = draft;
+			selected = to;
+			this.screen.rebuild();
+		}
+
+		return true;
+	}
+
+	private void extractDrag(final GuiGraphicsExtractor graphics) {
+		if (!dragging || pressedSlot < 0) {
+			return;
+		}
+
+		int target = this.slotAt(dragX, dragY);
+		if (target >= 0 && target != pressedSlot) {
+			int tabLeft = this.left + HandbookScreen.COVER_LEFT - TAB_REACH;
+			int tabTop = this.top + TABS_TOP + target * TAB_SPACING;
+			EnderInk.ring(graphics, tabLeft + 14, tabTop + 12, 11.0F, EnderInk.color(tabLeft, tabTop));
+		}
+
+		int color = ARGB.color(200, getSlotColor(ClientPassphrases.get(pressedSlot).slot()));
+		graphics.blit(RenderPipelines.GUI_TEXTURED, PASSPHRASE_ICON, (int)dragX - 8, (int)dragY - 8, 0.0F, 0.0F, 16, 16, 16, 16, color);
+	}
+
 	public void extractBackground(final GuiGraphicsExtractor graphics) {
 		graphics.blit(RenderPipelines.GUI_TEXTURED, PAGE_LOCATION, this.left, this.top, 0.0F, 0.0F, HandbookScreen.WIDTH, HandbookScreen.HEIGHT, HandbookScreen.WIDTH, HandbookScreen.HEIGHT);
 		EnderInk.stars(graphics, this.left + 13, this.top + 20, 274, 164, this.left + HandbookScreen.SEAM_X);
 	}
 
 	public void extractRenderState(final GuiGraphicsExtractor graphics) {
+		this.extractPage(graphics);
+		this.extractDrag(graphics);
+	}
+
+	private void extractPage(final GuiGraphicsExtractor graphics) {
 		PassphraseSlotsPayload.SlotView view = ClientPassphrases.get(selected);
 		PassphraseSlot slot = view.slot();
 		EnderInk.centeredText(graphics, this.font, Component.translatable("handbook.ender.slot", selected + 1), this.left + 80, this.top + 30);

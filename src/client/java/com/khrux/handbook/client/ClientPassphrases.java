@@ -6,6 +6,7 @@ import com.khrux.handbook.network.protocol.FollowPassphrasePayload;
 import com.khrux.handbook.network.protocol.PassphraseSettingsPayload;
 import com.khrux.handbook.network.protocol.PassphraseSlotsPayload;
 import com.khrux.handbook.network.protocol.SharePlainInkPayload;
+import com.khrux.handbook.network.protocol.SwapPassphraseSlotsPayload;
 import com.khrux.handbook.world.entity.player.PassphraseSlot;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
@@ -88,6 +89,10 @@ public class ClientPassphrases {
 
 	public static void changeSettings(final int index, final int color, final boolean enderInk) {
 		ClientPlayNetworking.send(new PassphraseSettingsPayload(index, color, enderInk));
+	}
+
+	public static void swap(final int first, final int second) {
+		ClientPlayNetworking.send(new SwapPassphraseSlotsPayload(first, second));
 	}
 
 	public static void sharePlainInk(final int index) {

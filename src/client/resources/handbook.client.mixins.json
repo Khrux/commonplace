@@ -9,7 +9,8 @@
 		"PlayerMixin",
 		"MouseHandlerMixin",
 		"AbstractClientPlayerMixin",
-		"RecipeBookComponentAccessor"
+		"RecipeBookComponentAccessor",
+		"CreativeModeInventoryScreenMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

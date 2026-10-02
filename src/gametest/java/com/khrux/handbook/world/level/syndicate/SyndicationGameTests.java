@@ -22,6 +22,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ChunkPos;
 
@@ -389,5 +390,118 @@ public class SyndicationGameTests {
 			})
 			.thenExecute(() -> remove(helper, a))
 			.thenSucceed();
+	}
+
+	@GameTest
+	public void shiftClickMovesToolsIntoSlots(final GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.getAbilities().instabuild = false;
+		player.getInventory().setItem(20, new ItemStack(Items.SPYGLASS));
+		player.getInventory().setItem(21, new ItemStack(HandbookItems.ENDER_QUILL));
+		player.getInventory().setItem(22, new ItemStack(Items.SPYGLASS));
+		player.inventoryMenu.quickMoveStack(player, 20);
+		player.inventoryMenu.quickMoveStack(player, 21);
+		player.inventoryMenu.quickMoveStack(player, 22);
+		helper.assertTrue(player.getAttachedOrElse(HandbookAttachmentTypes.SPYGLASS_SLOT, ItemStack.EMPTY).is(Items.SPYGLASS), "the spyglass should go into its slot");
+		helper.assertTrue(player.getAttachedOrElse(HandbookAttachmentTypes.QUILL_SLOT, ItemStack.EMPTY).is(HandbookItems.ENDER_QUILL), "the quill should go into its slot");
+		helper.assertTrue(player.getInventory().getItem(20).isEmpty() && player.getInventory().getItem(21).isEmpty(), "the moved items should leave the inventory");
+		helper.assertTrue(player.getInventory().contains(itemStack -> itemStack.is(Items.SPYGLASS)), "a second spyglass stays in the inventory");
+		remove(helper, player);
+		helper.succeed();
+	}
+
+	@GameTest(maxTicks = 100)
+	public void swappingSlotsReordersPassphrases(final GameTestHelper helper) {
+		ServerPlayer player = player(helper);
+		String first = newHash();
+		String second = newHash();
+		Syndication.follow(player, 0, first);
+		Syndication.follow(player, 3, second);
+		Syndication.changeSettings(player, 3, 5, false);
+		Syndication.swap(player, 0, 3);
+		helper.assertTrue(slot(player, 0).hash().equals(second) && slot(player, 0).color() == 5 && !slot(player, 0).enderInk(), "slot 0 should hold the second passphrase with its colour and ink");
+		helper.assertTrue(slot(player, 3).hash().equals(first), "slot 3 should hold the first passphrase");
+		Syndication.swap(player, 3, 4);
+		helper.assertTrue(slot(player, 3).isEmpty() && slot(player, 4).hash().equals(first), "swapping with an empty slot moves the passphrase");
+		helper.assertTrue(syndicate(helper, first).getFollowers().containsKey(player.getUUID()) && syndicate(helper, second).getFollowers().containsKey(player.getUUID()), "reordering keeps following both");
+		remove(helper, player);
+		helper.succeed();
+	}
+
+	@GameTest(maxTicks = 600)
+	public void performanceAtScale(final GameTestHelper helper) {
+		int followers = 100;
+		List<ServerPlayer> players = new java.util.ArrayList<>();
+		for (int i = 0; i < followers; i++) {
+			players.add(player(helper));
+		}
+
+		String hash = newHash();
+		String crowded = newHash();
+		String dimension = helper.getLevel().dimension().identifier().toString();
+		helper.startSequence()
+			.thenIdle(25)
+			.thenExecute(() -> {
+				long start = System.nanoTime();
+				for (ServerPlayer player : players) {
+					Syndication.follow(player, 0, hash);
+				}
+
+				report("follow, 100 players one after another", System.nanoTime() - start, followers);
+				Syndicate big = helper.getLevel().getServer().overworld().getAttachedOrCreate(HandbookAttachmentTypes.SYNDICATES).getOrCreate(crowded);
+				LongList chunks = new LongArrayList();
+				for (int x = 0; x < 300; x++) {
+					for (int z = 0; z < 300; z++) {
+						chunks.add(ChunkPos.pack(x + 50000, z));
+					}
+				}
+
+				big.getContent().add(new SharedContent.Delta(List.of(), List.of(), java.util.Map.of(dimension, chunks)));
+				long join = System.nanoTime();
+				Syndication.follow(players.get(0), 1, crowded);
+				report("join a passphrase holding 90,000 map chunks", System.nanoTime() - join, 1);
+				ResourceKey<Recipe<?>> recipe = recipe("lodestone");
+				players.forEach(player -> forget(player, recipe));
+				learn(players.get(1), recipe);
+				List<net.minecraft.world.item.crafting.RecipeHolder<?>> everything = List.copyOf(helper.getLevel().getServer().getRecipeManager().getRecipes());
+				players.forEach(player -> player.awardRecipes(everything));
+				long poll = System.nanoTime();
+				try {
+					java.lang.reflect.Method recipes = Syndication.class.getDeclaredMethod("getRecipes", ServerPlayer.class);
+					recipes.setAccessible(true);
+					for (ServerPlayer player : players) {
+						recipes.invoke(null, player);
+					}
+				} catch (ReflectiveOperationException e) {
+					throw new RuntimeException(e);
+				}
+
+				report("discovery poll reading " + everything.size() + " known recipes for each of 100 players (runs once a second)", System.nanoTime() - poll, 1);
+				LongList explored = new LongArrayList();
+				for (int i = 0; i < 169; i++) {
+					explored.add(ChunkPos.pack(90000 + i % 13, i / 13));
+				}
+
+				long explore = System.nanoTime();
+				Syndication.explore(players.get(2), dimension, explored);
+				report("share 169 newly explored chunks (one survey) to 99 followers", System.nanoTime() - explore, 1);
+				int[] stroke = new int[64];
+				for (int i = 0; i < stroke.length; i++) {
+					stroke[i] = NoteEditPayload.pack(i, 10, 5);
+				}
+
+				long note = System.nanoTime();
+				for (int i = 0; i < 100; i++) {
+					PassphraseNotebooks.edit(players.get(i), 0, 0, stroke, Optional.empty());
+				}
+
+				report("notebook stroke of 64 pixels, from each of 100 players", System.nanoTime() - note, 100);
+			})
+			.thenExecute(() -> players.forEach(player -> remove(helper, player)))
+			.thenSucceed();
+	}
+
+	private static void report(final String what, final long nanos, final int count) {
+		System.out.println("HANDBOOK PERF " + what + ": total " + String.format("%.2f", nanos / 1.0E6) + " ms, each " + String.format("%.3f", nanos / 1.0E6 / count) + " ms");
 	}
 }
