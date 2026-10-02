@@ -15,6 +15,7 @@ import net.minecraft.world.level.gamerules.GameRules;
 public class ToolSlot extends Slot {
 	public static final int SPYGLASS_X = HandbookSlot.X + 18;
 	public static final int COMPASS_X = HandbookSlot.X + 36;
+	public static final int QUILL_X = HandbookSlot.X + 54;
 	private static boolean revealed;
 	private final Player owner;
 	private final Item tool;
@@ -53,7 +54,7 @@ public class ToolSlot extends Slot {
 			return;
 		}
 
-		for (AttachmentType<ItemStack> type : List.of(HandbookAttachmentTypes.SPYGLASS_SLOT, HandbookAttachmentTypes.COMPASS_SLOT)) {
+		for (AttachmentType<ItemStack> type : List.of(HandbookAttachmentTypes.SPYGLASS_SLOT, HandbookAttachmentTypes.COMPASS_SLOT, HandbookAttachmentTypes.QUILL_SLOT)) {
 			ItemStack itemStack = player.removeAttached(type);
 			if (itemStack != null && !itemStack.isEmpty()) {
 				ItemEntity drop = player.createItemStackToDrop(itemStack, true, false);

@@ -7,13 +7,14 @@ import com.khrux.handbook.world.inventory.ToolSlot;
 import com.khrux.handbook.world.item.HandbookItem;
 import com.khrux.handbook.world.item.HandbookItems;
 import com.khrux.handbook.world.level.atlas.AtlasTracker;
+import com.khrux.handbook.world.level.syndicate.Syndication;
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.Identifier;
 
 public class Handbook implements ModInitializer {
@@ -25,6 +26,7 @@ public class Handbook implements ModInitializer {
 		HandbookAttachmentTypes.bootstrap();
 		NotebookSync.bootstrap();
 		AtlasTracker.bootstrap();
+		Syndication.bootstrap();
 		ServerTickEvents.END_SERVER_TICK.register(HandbookItem::tick);
 		ServerLivingEntityEvents.AFTER_DEATH.register((entity, source) -> ToolSlot.dropOnDeath(entity));
 		ServerEntityEvents.ENTITY_LOAD.register(HandbookItem::entityLoad);

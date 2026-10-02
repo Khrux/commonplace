@@ -5,10 +5,17 @@ import com.khrux.handbook.network.protocol.AtlasTilesPayload;
 import com.khrux.handbook.network.protocol.PlaceAtlasMarkerPayload;
 import com.khrux.handbook.network.protocol.RemoveAtlasMarkerPayload;
 import com.khrux.handbook.world.entity.player.HandbookAttachmentTypes;
+import com.khrux.handbook.world.level.syndicate.Syndication;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.longs.LongCollection;
 import it.unimi.dsi.fastutil.longs.LongIterator;
 import it.unimi.dsi.fastutil.longs.LongSet;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityLevelChangeEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -16,15 +23,10 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import net.minecraft.core.BlockPos;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -89,6 +91,7 @@ public class AtlasTracker {
 		ChunkPos center = player.chunkPosition();
 		LongArrayList positions = new LongArrayList();
 		IntArrayList tiles = new IntArrayList();
+		LongArrayList discovered = new LongArrayList();
 		for (int dx = -RADIUS; dx <= RADIUS; dx++) {
 			for (int dz = -RADIUS; dz <= RADIUS; dz++) {
 				long pos = ChunkPos.pack(center.x() + dx, center.z() + dz);
@@ -117,9 +120,46 @@ public class AtlasTracker {
 					continue;
 				}
 
-				explored.add(pos);
+				if (explored.add(pos)) {
+					discovered.add(pos);
+				}
+
 				positions.add(pos);
 				tiles.add(tile);
+			}
+		}
+
+		if (!positions.isEmpty()) {
+			send(player, false, atlas, positions, tiles);
+		}
+
+		Syndication.explore(player, level.dimension().identifier().toString(), discovered);
+	}
+
+	public static void reveal(final ServerPlayer player, final String dimension, final LongCollection received) {
+		LongSet explored = player.getAttachedOrCreate(HandbookAttachmentTypes.EXPLORED).get(dimension);
+		boolean current = dimension.equals(player.level().dimension().identifier().toString());
+		WorldAtlas atlas = getAtlas(player.level());
+		LongArrayList positions = new LongArrayList();
+		IntArrayList tiles = new IntArrayList();
+		LongIterator iterator = received.iterator();
+		while (iterator.hasNext()) {
+			long pos = iterator.nextLong();
+			if (!explored.add(pos) || !current) {
+				continue;
+			}
+
+			int tile = atlas.getTile(pos);
+			if (tile == WorldAtlas.NO_TILE) {
+				continue;
+			}
+
+			positions.add(pos);
+			tiles.add(tile);
+			if (positions.size() == AtlasTilesPayload.MAX_BATCH) {
+				send(player, false, atlas, positions, tiles);
+				positions.clear();
+				tiles.clear();
 			}
 		}
 

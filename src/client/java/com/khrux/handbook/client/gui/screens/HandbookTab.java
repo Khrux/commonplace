@@ -1,11 +1,16 @@
 package com.khrux.handbook.client.gui.screens;
 
 import com.khrux.handbook.Handbook;
+import com.khrux.handbook.world.entity.player.HandbookAttachmentTypes;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 public enum HandbookTab {
+	ENDER("ender"),
 	RECIPES("recipes"),
 	FIELD_GUIDE("field_guide"),
 	ATLAS("atlas"),
@@ -45,6 +50,11 @@ public enum HandbookTab {
 	}
 
 	public boolean isAvailable() {
+		if (this == ENDER) {
+			Player player = Minecraft.getInstance().player;
+			return player != null && !player.getAttachedOrElse(HandbookAttachmentTypes.QUILL_SLOT, ItemStack.EMPTY).isEmpty();
+		}
+
 		return this != FIELD_GUIDE || FabricLoader.getInstance().isModLoaded("fieldguide");
 	}
 }

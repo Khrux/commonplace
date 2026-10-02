@@ -9,6 +9,7 @@ import net.minecraft.world.item.Item;
 
 public class HandbookItems {
 	public static final Item HANDBOOK = registerItem(HandbookItemIds.HANDBOOK, HandbookItem::new, new Item.Properties().stacksTo(1));
+	public static final Item ENDER_QUILL = registerItem(HandbookItemIds.ENDER_QUILL, Item::new, new Item.Properties().stacksTo(16));
 
 	private static Item registerItem(final ResourceKey<Item> id, final Function<Item.Properties, Item> itemFactory, final Item.Properties properties) {
 		return Registry.register(BuiltInRegistries.ITEM, id, itemFactory.apply(properties.setId(id)));

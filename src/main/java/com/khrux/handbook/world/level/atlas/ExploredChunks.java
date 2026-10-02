@@ -26,6 +26,10 @@ public class ExploredChunks {
 		return stored;
 	}
 
+	public Map<String, LongSet> getDimensions() {
+		return this.dimensions;
+	}
+
 	public LongSet get(final String dimension) {
 		return this.dimensions.computeIfAbsent(dimension, key -> new LongOpenHashSet());
 	}

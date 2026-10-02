@@ -8,9 +8,9 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
-public record NotebookPayload(List<NotePage> pages) implements CustomPacketPayload {
+public record NotebookPayload(int book, List<NotePage> pages) implements CustomPacketPayload {
 	public static final StreamCodec<FriendlyByteBuf, NotebookPayload> STREAM_CODEC = StreamCodec.composite(
-		NotePage.STREAM_CODEC.apply(ByteBufCodecs.list(NotePage.PAGES)), NotebookPayload::pages, NotebookPayload::new
+		ByteBufCodecs.VAR_INT, NotebookPayload::book, NotePage.STREAM_CODEC.apply(ByteBufCodecs.list(NotePage.PAGES)), NotebookPayload::pages, NotebookPayload::new
 	);
 	public static final CustomPacketPayload.Type<NotebookPayload> TYPE = new CustomPacketPayload.Type<>(Handbook.id("notebook"));
 

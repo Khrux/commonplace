@@ -52,6 +52,9 @@ BOTTLE = [
 BOTTLE_GREYS = {"o": 48, "w": 236, "c": 150, "C": 188, "g": 200, "h": 248, "s": 160, "i": 96}
 
 
+BARE_BONES_QUILL_COLORS = dict(QUILL_COLORS, d=(78, 54, 102), l=(78, 54, 102), G=(32, 128, 104))
+
+
 def draw(rows, colors):
     image = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
     for y, row in enumerate(rows):
@@ -67,6 +70,9 @@ def main():
     items = assets / "textures" / "item"
     gui = assets / "textures" / "gui" / "icon"
     items.mkdir(parents=True, exist_ok=True)
+    if len(sys.argv) > 2 and sys.argv[2] == "bare_bones":
+        draw(QUILL, BARE_BONES_QUILL_COLORS).save(items / "ender_quill.png")
+        return
     gui.mkdir(parents=True, exist_ok=True)
     draw(QUILL, QUILL_COLORS).save(items / "ender_quill.png")
     draw(BOTTLE, BOTTLE_GREYS).save(gui / "passphrase.png")

@@ -2,9 +2,11 @@ package com.khrux.handbook.client.renderer;
 
 import com.khrux.handbook.Handbook;
 import com.khrux.handbook.client.ClientNotebook;
+import com.khrux.handbook.client.ClientSheen;
 import com.khrux.handbook.client.atlas.AtlasTextures;
 import com.khrux.handbook.client.atlas.AtlasTileRenderer;
 import com.khrux.handbook.client.atlas.ClientAtlas;
+import com.khrux.handbook.client.gui.components.AtlasMap;
 import com.khrux.handbook.client.gui.components.NoteCanvas;
 import com.khrux.handbook.client.gui.screens.HandbookScreen;
 import com.khrux.handbook.client.gui.screens.HandbookTab;
@@ -59,6 +61,7 @@ public class HeldHandbookRenderer {
 	private static final float TURNING_PAGE_TOP = 6.0F;
 	private static final float TURNING_PAGE_BOTTOM = 174.0F;
 	private static final long TURN_MILLIS = 350L;
+	private static final int DIMMED_TILE_COLOR = 0x50FFFFFF;
 	private static long turnStart = -TURN_MILLIS;
 	private static int turnDirection;
 	private static HandbookTab previousTab = HandbookTab.RECIPES;
@@ -151,9 +154,9 @@ public class HeldHandbookRenderer {
 			case ATLAS -> renderAtlas(poseStack, submitNodeCollector, lightCoords, left ? MAP_LEFT : SEAM, left ? SEAM : MAP_RIGHT);
 			case NOTES -> {
 				int page = NotesPage.getSpread() * 2 + (left ? 0 : 1);
-				renderNotePage(poseStack, submitNodeCollector, lightCoords, ClientNotebook.get(page), left ? LEFT_PAGE_X : RIGHT_PAGE_X);
+				renderNotePage(poseStack, submitNodeCollector, lightCoords, ClientNotebook.get(NotesPage.getBook(), page), left ? LEFT_PAGE_X : RIGHT_PAGE_X);
 			}
-			case RECIPES, FIELD_GUIDE -> {
+			case ENDER, RECIPES, FIELD_GUIDE -> {
 				Identifier snapshot = PageSnapshot.get(tab);
 				if (snapshot != null) {
 					renderSnapshot(poseStack, submitNodeCollector, lightCoords, snapshot, left);
@@ -193,22 +196,27 @@ public class HeldHandbookRenderer {
 		int maxChunkZ = Mth.floor((topBlock + (MAP_BOTTOM - MAP_TOP) * blocksPerUnit) / 16.0) + 1;
 		int originX = MAP_LEFT + (int)Math.round((minChunkX * 16 - leftBlock) / blocksPerUnit);
 		int originY = MAP_TOP + (int)Math.round((minChunkZ * 16 - topBlock) / blocksPerUnit);
-		Map<Identifier, List<float[]>> subtiles = new HashMap<>();
-		AtlasTileRenderer.render((texture, x, y, size, u0, u1, v0, v1) -> {
+		String dimension = player.level().dimension().identifier().toString();
+		Map<Identifier, List<HeldHandbookRenderer.Quad>> subtiles = new HashMap<>();
+		AtlasTileRenderer.render((texture, chunkX, chunkZ, x, y, size, u0, u1, v0, v1) -> {
 			float x0 = Math.max(x, minX);
 			float x1 = Math.min(x + size, maxX);
 			if (x1 > x0 && x >= MAP_LEFT && y >= MAP_TOP && x + size <= MAP_RIGHT && y + size <= MAP_BOTTOM) {
 				float clippedU0 = u0 + (u1 - u0) * (x0 - x) / size;
 				float clippedU1 = u0 + (u1 - u0) * (x1 - x) / size;
-				subtiles.computeIfAbsent(texture, key -> new ArrayList<>()).add(new float[]{x0, y, x1, y + size, clippedU0, clippedU1, v0, v1});
+				int sheen = ClientSheen.getChunkSheen(dimension, ChunkPos.pack(chunkX, chunkZ));
+				InkMasks.Mask mask = sheen == ClientSheen.NONE || sheen == ClientSheen.DIMMED ? null : InkMasks.get(texture, AtlasMap.INK_BELOW);
+				Identifier drawn = mask == null ? texture : mask.location();
+				int color = mask != null ? AtlasMap.getInkColor(sheen) : sheen == ClientSheen.DIMMED ? DIMMED_TILE_COLOR : -1;
+				subtiles.computeIfAbsent(drawn, key -> new ArrayList<>()).add(new HeldHandbookRenderer.Quad(x0, y, x1, y + size, clippedU0, clippedU1, v0, v1, color));
 			}
 		}, minChunkX, minChunkZ, maxChunkX, maxChunkZ, originX, originY, HELD_SUBTILE);
 		subtiles.forEach((texture, quads) -> submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.text(texture), (pose, buffer) -> {
-			for (float[] subtile : quads) {
-				buffer.addVertex(pose, subtile[0], subtile[3], 0.0F).setColor(-1).setUv(subtile[4], subtile[7]).setLight(lightCoords);
-				buffer.addVertex(pose, subtile[2], subtile[3], 0.0F).setColor(-1).setUv(subtile[5], subtile[7]).setLight(lightCoords);
-				buffer.addVertex(pose, subtile[2], subtile[1], 0.0F).setColor(-1).setUv(subtile[5], subtile[6]).setLight(lightCoords);
-				buffer.addVertex(pose, subtile[0], subtile[1], 0.0F).setColor(-1).setUv(subtile[4], subtile[6]).setLight(lightCoords);
+			for (HeldHandbookRenderer.Quad quad : quads) {
+				buffer.addVertex(pose, quad.x0(), quad.y1(), 0.0F).setColor(quad.color()).setUv(quad.u0(), quad.v1()).setLight(lightCoords);
+				buffer.addVertex(pose, quad.x1(), quad.y1(), 0.0F).setColor(quad.color()).setUv(quad.u1(), quad.v1()).setLight(lightCoords);
+				buffer.addVertex(pose, quad.x1(), quad.y0(), 0.0F).setColor(quad.color()).setUv(quad.u1(), quad.v0()).setLight(lightCoords);
+				buffer.addVertex(pose, quad.x0(), quad.y0(), 0.0F).setColor(quad.color()).setUv(quad.u0(), quad.v0()).setLight(lightCoords);
 			}
 		}));
 		AtlasTextures textures = AtlasTextures.get(Minecraft.getInstance().getResourceManager());
@@ -320,5 +328,8 @@ public class HeldHandbookRenderer {
 		submitNodeCollector.submitText(
 			poseStack, x + (PAGE_WIDTH - width) / 2.0F, PAGE_Y + 8, heading.getVisualOrderText(), false, Font.DisplayMode.NORMAL, lightCoords, RecipesPage.INK_COLOR, 0, 0
 		);
+	}
+
+	private record Quad(float x0, float y0, float x1, float y1, float u0, float u1, float v0, float v1, int color) {
 	}
 }

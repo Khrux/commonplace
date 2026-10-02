@@ -2,16 +2,20 @@ package com.khrux.handbook.client.gui.screens;
 
 import com.khrux.handbook.Handbook;
 import com.khrux.handbook.client.ClientNotebook;
+import com.khrux.handbook.client.ClientPassphrases;
 import com.khrux.handbook.client.HandbookKeyMappings;
 import com.khrux.handbook.client.compat.FieldGuideTab;
 import com.khrux.handbook.client.gui.components.AtlasMap;
 import com.khrux.handbook.client.gui.components.HandbookTabButton;
+import com.khrux.handbook.client.gui.components.SheenRibbons;
 import com.khrux.handbook.client.renderer.PageSnapshot;
 import com.khrux.handbook.world.item.HandbookItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.ScrollWheelHandler;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -29,6 +33,7 @@ public class HandbookScreen extends Screen {
 	public static final int BOOK_WIDTH = 295;
 	public static final Identifier BOOK_LOCATION = Handbook.id("textures/gui/book.png");
 	public static final Identifier COVER_LOCATION = Handbook.id("textures/gui/book_cover.png");
+	public static final Identifier ENDER_BOOK_LOCATION = Handbook.id("textures/gui/book_ender.png");
 	public static final int SEAM_X = 150;
 	private static final int PAGE_EDGE_COLOR = 0xFFA07A48;
 	private static final int SEAM_SHADOW = 6;
@@ -38,8 +43,10 @@ public class HandbookScreen extends Screen {
 	private final ScrollWheelHandler scrollWheelHandler = new ScrollWheelHandler();
 	private @Nullable RecipesPage recipes;
 	private @Nullable NotesPage notes;
+	private @Nullable EnderPage ender;
 	private int left;
 	private int top;
+	private int passphraseVersion;
 
 	private HandbookScreen(final @Nullable Screen parent, final HandbookTab tab) {
 		super(Component.translatable("item.handbook.handbook"));
@@ -66,21 +73,31 @@ public class HandbookScreen extends Screen {
 	private static void select(final HandbookTab tab, final @Nullable Screen parent) {
 		HandbookTab chosen = tab.isAvailable() ? tab : HandbookTab.RECIPES;
 		lastTab = chosen;
-		if (chosen == HandbookTab.FIELD_GUIDE) {
-			FieldGuideTab.open();
-			return;
+		Runnable open = chosen == HandbookTab.FIELD_GUIDE ? FieldGuideTab::open : () -> Minecraft.getInstance().gui.setScreen(new HandbookScreen(parent, chosen));
+		Screen current = Minecraft.getInstance().gui.screen();
+		if (current instanceof HandbookScreen screen && screen.hasSnapshot()) {
+			PageSnapshot.leave(screen.tab, screen.left, screen.top, open);
+		} else if (HandbookTab.FIELD_GUIDE.isAvailable() && FieldGuideTab.isGuideScreen(current)) {
+			FieldGuideTab.leave(current, open);
+		} else {
+			open.run();
 		}
+	}
 
-		Minecraft.getInstance().gui.setScreen(new HandbookScreen(parent, chosen));
+	private boolean hasSnapshot() {
+		return this.tab == HandbookTab.RECIPES || this.tab == HandbookTab.ENDER;
 	}
 
 	@Override
 	protected void init() {
+		this.passphraseVersion = ClientPassphrases.getVersion();
 		this.recipes = null;
 		this.notes = null;
+		this.ender = null;
 		this.left = (this.width - WIDTH) / 2;
 		this.top = (this.height - HEIGHT) / 2;
 		HandbookTabButton.addMainTabs(this.left + COVER_LEFT, this.top + COVER_TOP, this.tab, this::addRenderableWidget);
+		SheenRibbons.add(this.left, this.top, this::addRenderableWidget);
 		if (this.tab == HandbookTab.ATLAS) {
 			this.addRenderableWidget(new AtlasMap(this.left + 17, this.top + 19, 267, 166));
 		} else if (this.tab == HandbookTab.RECIPES) {
@@ -89,6 +106,9 @@ public class HandbookScreen extends Screen {
 		} else if (this.tab == HandbookTab.NOTES) {
 			this.notes = new NotesPage(this, this.left, this.top);
 			this.notes.init(this::addRenderableWidget);
+		} else if (this.tab == HandbookTab.ENDER) {
+			this.ender = new EnderPage(this, this.left, this.top);
+			this.ender.init(this::addRenderableWidget);
 		}
 	}
 
@@ -107,9 +127,12 @@ public class HandbookScreen extends Screen {
 	@Override
 	public void extractBackground(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float a) {
 		super.extractBackground(graphics, mouseX, mouseY, a);
-		graphics.blit(RenderPipelines.GUI_TEXTURED, BOOK_LOCATION, this.left, this.top, 0.0F, 0.0F, WIDTH, HEIGHT, WIDTH, HEIGHT);
+		graphics.blit(RenderPipelines.GUI_TEXTURED, this.tab == HandbookTab.ENDER ? ENDER_BOOK_LOCATION : BOOK_LOCATION, this.left, this.top, 0.0F, 0.0F, WIDTH, HEIGHT, WIDTH, HEIGHT);
 		graphics.blit(RenderPipelines.GUI_TEXTURED, COVER_LOCATION, this.left, this.top, 0.0F, 0.0F, WIDTH, HEIGHT, WIDTH, HEIGHT, HandbookItem.getColor(this.minecraft.player));
 		extractPageEdges(graphics, this.left, this.top, this.tab);
+		if (this.ender != null) {
+			this.ender.extractBackground(graphics);
+		}
 	}
 
 	@Override
@@ -126,6 +149,12 @@ public class HandbookScreen extends Screen {
 		if (this.notes != null) {
 			this.notes.extractRenderState(graphics);
 		}
+
+		if (this.ender != null) {
+			this.ender.extractRenderState(graphics);
+		}
+
+		PageSnapshot.frameExtracted();
 	}
 
 	public static void extractPageEdges(final GuiGraphicsExtractor graphics, final int left, final int top, final HandbookTab tab) {
@@ -168,6 +197,14 @@ public class HandbookScreen extends Screen {
 
 	@Override
 	public boolean keyPressed(final KeyEvent event) {
+		if (this.ender != null && this.ender.keyPressed(event)) {
+			return true;
+		}
+
+		if (this.getFocused() instanceof EditBox || this.getFocused() instanceof MultiLineEditBox) {
+			return super.keyPressed(event);
+		}
+
 		for (HandbookTab other : HandbookTab.values()) {
 			if (other != this.tab && HandbookKeyMappings.getTabKey(other).matches(event)) {
 				select(other, this.parent);
@@ -179,16 +216,36 @@ public class HandbookScreen extends Screen {
 	}
 
 	@Override
+	public void tick() {
+		if (this.passphraseVersion != ClientPassphrases.getVersion()) {
+			this.rebuild();
+			return;
+		}
+
+		if (this.ender != null) {
+			this.ender.tick();
+		}
+
+		if (this.notes != null) {
+			this.notes.tick();
+		}
+	}
+
+	@Override
 	public void removed() {
-		if (this.tab == HandbookTab.RECIPES) {
+		if (this.hasSnapshot()) {
 			PageSnapshot.capture(this.tab, this.left, this.top);
 		}
 
-		ClientNotebook.send();
+		ClientNotebook.flush();
 	}
 
 	@Override
 	public void onClose() {
-		this.minecraft.gui.setScreen(this.parent);
+		if (this.hasSnapshot()) {
+			PageSnapshot.leave(this.tab, this.left, this.top, () -> this.minecraft.gui.setScreen(this.parent));
+		} else {
+			this.minecraft.gui.setScreen(this.parent);
+		}
 	}
 }

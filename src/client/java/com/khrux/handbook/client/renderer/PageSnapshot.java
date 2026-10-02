@@ -7,6 +7,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.renderpearl.api.textures.FilterMode;
 import java.util.EnumMap;
 import java.util.Map;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.Identifier;
@@ -18,10 +19,46 @@ public class PageSnapshot extends DynamicTexture {
 	public static final int WIDTH = 281;
 	public static final int HEIGHT = 168;
 	private static final Map<HandbookTab, Identifier> SNAPSHOTS = new EnumMap<>(HandbookTab.class);
+	private static final double AWAY = -10000.0;
+	private static PageSnapshot.@Nullable Leaving leaving;
+	private static boolean cleanFrame;
 
 	private PageSnapshot(final Identifier id, final int width, final int height) {
 		super(id::toString, width, height, true);
 		this.sampler = RenderSystem.getSamplerCache().getClampToEdge(FilterMode.LINEAR);
+	}
+
+	public static void bootstrap() {
+		ClientTickEvents.START_CLIENT_TICK.register(PageSnapshot::tick);
+	}
+
+	public static void leave(final HandbookTab tab, final int bookLeft, final int bookTop, final Runnable action) {
+		if (leaving != null) {
+			return;
+		}
+
+		Minecraft minecraft = Minecraft.getInstance();
+		leaving = new PageSnapshot.Leaving(tab, bookLeft, bookTop, action);
+		cleanFrame = false;
+		minecraft.mouseHandler.onMove(minecraft.getWindow().handle(), AWAY, AWAY, 0.0, 0.0);
+	}
+
+	public static void frameExtracted() {
+		if (leaving != null) {
+			cleanFrame = true;
+		}
+	}
+
+	private static void tick(final Minecraft minecraft) {
+		PageSnapshot.Leaving current = leaving;
+		if (current == null || !cleanFrame) {
+			return;
+		}
+
+		leaving = null;
+		capture(current.tab(), current.bookLeft(), current.bookTop());
+		current.action().run();
+		minecraft.mouseHandler.resyncMousePosition();
 	}
 
 	public static @Nullable Identifier get(final HandbookTab tab) {
@@ -45,5 +82,8 @@ public class PageSnapshot extends DynamicTexture {
 		RenderSystem.getDevice().createCommandEncoder().copyTextureToTexture(target.getColorTexture(), snapshot.getTexture(), 0, 0, 0, x, y, width, height);
 		minecraft.getTextureManager().register(id, snapshot);
 		SNAPSHOTS.put(tab, id);
+	}
+
+	private record Leaving(HandbookTab tab, int bookLeft, int bookTop, Runnable action) {
 	}
 }

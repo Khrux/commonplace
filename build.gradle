@@ -23,6 +23,14 @@ fabricApi {
 	configureDataGeneration {
 		client = true
 	}
+
+	configureTests {
+		createSourceSet = true
+		modId = "handbook-gametest"
+		enableGameTests = true
+		enableClientGameTests = false
+		eula = true
+	}
 }
 
 dependencies {
@@ -30,6 +38,8 @@ dependencies {
 	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 	compileOnly files("libs/fieldguide-1.20.0+26.3-fabric.jar")
+	gametestCompileOnly files("libs/fieldguide-1.20.0+26.3-fabric.jar")
+	gametestRuntimeOnly files("libs/fieldguide-1.20.0+26.3-fabric.jar")
 }
 
 processResources {

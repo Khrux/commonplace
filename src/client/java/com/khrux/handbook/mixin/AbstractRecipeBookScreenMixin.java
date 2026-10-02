@@ -86,7 +86,7 @@ public abstract class AbstractRecipeBookScreenMixin<T extends RecipeBookMenu> ex
 		ToolSlot.setRevealed(false);
 		this.addRenderableOnly((graphics, mouseX, mouseY, a) -> {
 			boolean overBook = mouseX >= x && mouseY >= y && mouseX < x + 18 && mouseY < y + 18;
-			boolean overTools = mouseX >= x && mouseY >= y && mouseX < this.leftPos + ToolSlot.COMPASS_X + 17 && mouseY < y + 18;
+			boolean overTools = mouseX >= x && mouseY >= y && mouseX < this.leftPos + ToolSlot.QUILL_X + 17 && mouseY < y + 18;
 			ToolSlot.setRevealed(overBook || overTools && this.revealedTools());
 			graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SLOT_SPRITE, x, y, 18, 18);
 		});

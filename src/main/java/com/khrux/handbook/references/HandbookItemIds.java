@@ -7,6 +7,7 @@ import net.minecraft.world.item.Item;
 
 public class HandbookItemIds {
 	public static final ResourceKey<Item> HANDBOOK = create("handbook");
+	public static final ResourceKey<Item> ENDER_QUILL = create("ender_quill");
 
 	private static ResourceKey<Item> create(final String name) {
 		return ResourceKey.create(Registries.ITEM, Handbook.id(name));

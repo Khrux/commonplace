@@ -12,6 +12,15 @@ PALETTE = {
     "w": (242, 226, 191),
 }
 
+ENDER_PALETTE = {
+    "o": (20, 16, 13),
+    "d": (42, 34, 27),
+    "m": (64, 52, 41),
+    "l": (88, 72, 57),
+    "h": (116, 97, 77),
+    "w": (150, 129, 104),
+}
+
 ICONS = {
     "field_guide": [
         "................",
@@ -141,14 +150,14 @@ def compass_rose():
     return ["".join(row) for row in grid]
 
 
-def draw(rows):
+def draw(rows, palette=PALETTE):
     image = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
     for y, row in enumerate(rows):
         if len(row) != 16:
             raise ValueError(f"row {y} is {len(row)} wide: {row}")
         for x, key in enumerate(row):
             if key != ".":
-                image.putpixel((x, y), PALETTE[key.lower()] + (255,))
+                image.putpixel((x, y), palette[key.lower()] + (255,))
     return image
 
 
@@ -157,7 +166,7 @@ def main():
     target.mkdir(parents=True, exist_ok=True)
     icons = dict(ICONS, recipes=hammer_and_saw(), atlas=compass_rose())
     for name, rows in icons.items():
-        draw(rows).save(target / f"{name}.png")
+        draw(rows, ENDER_PALETTE if name == "ender" else PALETTE).save(target / f"{name}.png")
 
 
 main()

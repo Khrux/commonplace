@@ -3,6 +3,7 @@ package com.khrux.handbook.mixin;
 import com.khrux.handbook.world.entity.player.HandbookAttachmentTypes;
 import com.khrux.handbook.world.inventory.HandbookSlot;
 import com.khrux.handbook.world.inventory.ToolSlot;
+import com.khrux.handbook.world.item.HandbookItems;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractCraftingMenu;
@@ -24,5 +25,6 @@ public abstract class InventoryMenuMixin extends AbstractCraftingMenu {
 		this.addSlot(new HandbookSlot(owner));
 		this.addSlot(new ToolSlot(owner, HandbookAttachmentTypes.SPYGLASS_SLOT, Items.SPYGLASS, ToolSlot.SPYGLASS_X));
 		this.addSlot(new ToolSlot(owner, HandbookAttachmentTypes.COMPASS_SLOT, Items.COMPASS, ToolSlot.COMPASS_X));
+		this.addSlot(new ToolSlot(owner, HandbookAttachmentTypes.QUILL_SLOT, HandbookItems.ENDER_QUILL, ToolSlot.QUILL_X));
 	}
 }

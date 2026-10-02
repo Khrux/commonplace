@@ -16,13 +16,15 @@ import net.minecraft.world.item.DyeColor;
 public class NoteCanvas extends AbstractWidget {
 	private static final int TEXT_PADDING = 4;
 	private final int scale;
+	private final int book;
 	private final int page;
 	private int lastX = -1;
 	private int lastY = -1;
 
-	public NoteCanvas(final int x, final int y, final int scale, final int page) {
+	public NoteCanvas(final int x, final int y, final int scale, final int book, final int page) {
 		super(x, y, NotePage.CANVAS_WIDTH * scale, NotePage.CANVAS_HEIGHT * scale, Component.translatable("handbook.tab.notes"));
 		this.scale = scale;
+		this.book = book;
 		this.page = page;
 	}
 
@@ -32,7 +34,7 @@ public class NoteCanvas extends AbstractWidget {
 
 	@Override
 	protected void extractWidgetRenderState(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float a) {
-		NotePage notePage = ClientNotebook.get(this.page);
+		NotePage notePage = ClientNotebook.get(this.book, this.page);
 		for (int y = 0; y < NotePage.CANVAS_HEIGHT; y++) {
 			int start = 0;
 			while (start < NotePage.CANVAS_WIDTH) {
@@ -79,7 +81,6 @@ public class NoteCanvas extends AbstractWidget {
 	@Override
 	public void onRelease(final MouseButtonEvent event) {
 		this.lastX = -1;
-		ClientNotebook.send();
 	}
 
 	private void paint(final double mouseX, final double mouseY) {
@@ -101,20 +102,15 @@ public class NoteCanvas extends AbstractWidget {
 	private void dab(final int x, final int y) {
 		boolean erasing = NotesPage.getTool() == NotesPage.Tool.ERASER;
 		int radius = erasing ? 1 : 0;
-		int color = erasing ? 0 : NotesPage.getColor();
-		NotePage notePage = ClientNotebook.get(this.page);
+		int color = erasing ? 0 : NotesPage.getInk();
 		for (int dy = -radius; dy <= radius; dy++) {
 			for (int dx = -radius; dx <= radius; dx++) {
 				int px = x + dx;
 				int py = y + dy;
-				if (px >= 0 && px < NotePage.CANVAS_WIDTH && py >= 0 && py < NotePage.CANVAS_HEIGHT && notePage.getPixel(px, py) != color) {
-					notePage = notePage.withPixel(px, py, color);
+				if (px >= 0 && px < NotePage.CANVAS_WIDTH && py >= 0 && py < NotePage.CANVAS_HEIGHT && ClientNotebook.get(this.book, this.page).getPixel(px, py) != color) {
+					ClientNotebook.paint(this.book, this.page, px, py, color);
 				}
 			}
-		}
-
-		if (notePage != ClientNotebook.get(this.page)) {
-			ClientNotebook.put(this.page, notePage);
 		}
 	}
 

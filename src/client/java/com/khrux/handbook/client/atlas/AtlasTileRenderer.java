@@ -28,22 +28,22 @@ public class AtlasTileRenderer {
 		AtlasTileTexture bottomRight = ClientAtlas.getTexture(x, z);
 		if (topLeft != null) {
 			int shape = shape(topLeft, topRight, bottomLeft, bottomRight, ClientAtlas.getTexture(x - 1, z - 2), ClientAtlas.getTexture(x - 2, z - 1));
-			draw(output, topLeft, shape, 1, 1, screenX - subtile, screenY - subtile, subtile);
+			draw(output, topLeft, x - 1, z - 1, shape, 1, 1, screenX - subtile, screenY - subtile, subtile);
 		}
 
 		if (topRight != null) {
 			int shape = shape(topRight, topLeft, bottomRight, bottomLeft, ClientAtlas.getTexture(x, z - 2), ClientAtlas.getTexture(x + 1, z - 1));
-			draw(output, topRight, shape, 0, 1, screenX, screenY - subtile, subtile);
+			draw(output, topRight, x, z - 1, shape, 0, 1, screenX, screenY - subtile, subtile);
 		}
 
 		if (bottomLeft != null) {
 			int shape = shape(bottomLeft, bottomRight, topLeft, topRight, ClientAtlas.getTexture(x - 1, z + 1), ClientAtlas.getTexture(x - 2, z));
-			draw(output, bottomLeft, shape, 1, 0, screenX - subtile, screenY, subtile);
+			draw(output, bottomLeft, x - 1, z, shape, 1, 0, screenX - subtile, screenY, subtile);
 		}
 
 		if (bottomRight != null) {
 			int shape = shape(bottomRight, bottomLeft, topRight, topLeft, ClientAtlas.getTexture(x, z + 1), ClientAtlas.getTexture(x + 1, z));
-			draw(output, bottomRight, shape, 0, 0, screenX, screenY, subtile);
+			draw(output, bottomRight, x, z, shape, 0, 0, screenX, screenY, subtile);
 		}
 	}
 
@@ -72,7 +72,11 @@ public class AtlasTileRenderer {
 	}
 
 	private static void draw(
-		final AtlasTileRenderer.Output output, final AtlasTileTexture texture, final int shape, final int partU, final int partV, final int x, final int y, final int subtile
+		final AtlasTileRenderer.Output output,
+		final AtlasTileTexture texture,
+		final int chunkX,
+		final int chunkZ,
+		final int shape, final int partU, final int partV, final int x, final int y, final int subtile
 	) {
 		int u = switch (shape) {
 			case CONVEX, VERTICAL -> partU * 3;
@@ -85,10 +89,10 @@ public class AtlasTileRenderer {
 			case CONCAVE, SINGLE_OBJECT -> partV;
 			default -> 4 - partV;
 		};
-		output.subtile(texture.getLocation(), x, y, subtile, u / 4.0F, (u + 1) / 4.0F, v / 6.0F, (v + 1) / 6.0F);
+		output.subtile(texture.getLocation(), chunkX, chunkZ, x, y, subtile, u / 4.0F, (u + 1) / 4.0F, v / 6.0F, (v + 1) / 6.0F);
 	}
 
 	public interface Output {
-		void subtile(Identifier texture, int x, int y, int size, float u0, float u1, float v0, float v1);
+		void subtile(Identifier texture, int chunkX, int chunkZ, int x, int y, int size, float u0, float u1, float v0, float v1);
 	}
 }

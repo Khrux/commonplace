@@ -1,7 +1,9 @@
 package com.khrux.handbook.client.gui.components;
 
 import com.khrux.handbook.Handbook;
+import com.khrux.handbook.client.ClientSheen;
 import com.khrux.handbook.client.gui.screens.RecipesPage;
+import com.khrux.handbook.client.renderer.InkMasks;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -12,6 +14,7 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.display.RecipeDisplayEntry;
 
@@ -26,6 +29,10 @@ public class RecipeGrid extends AbstractWidget {
 	private static final Identifier SLOT_UNCRAFTABLE_SPRITE = Handbook.id("recipe_slot_uncraftable");
 	private static final Identifier SLOT_SELECTED_SPRITE = Handbook.id("recipe_slot_selected");
 	private static final int BOX = 23;
+	private static final int WASH_ALPHA = 22;
+	private static final float INK_DEPTH = 0.2F;
+	private static final float INK_BELOW = 0.65F;
+	private static final int DIMMED_COLOR = 0xB0F4EAD2;
 	private final RecipesPage page;
 
 	public RecipeGrid(final int x, final int y, final RecipesPage page) {
@@ -54,6 +61,7 @@ public class RecipeGrid extends AbstractWidget {
 			ItemStack result = this.page.getResult(collection);
 			graphics.fakeItem(result, x + 4, y + 4);
 			graphics.fill(x + 4, y + 4, x + 20, y + 20, RecipesPage.SEPIA_WASH);
+			extractSheen(graphics, getSprite(collection), x, y, getSheen(collection.getRecipes()));
 
 			if (mouseX >= x && mouseX < x + CELL && mouseY >= y && mouseY < y + CELL) {
 				graphics.setTooltipForNextFrame(Minecraft.getInstance().font, result, mouseX, mouseY);
@@ -71,10 +79,43 @@ public class RecipeGrid extends AbstractWidget {
 			ItemStack result = this.page.getResult(entry);
 			graphics.fakeItem(result, x + 4, y + 4);
 			graphics.fill(x + 4, y + 4, x + 20, y + 20, RecipesPage.SEPIA_WASH);
+			extractSheen(graphics, variants.isCraftable(entry.id()) ? SLOT_CRAFTABLE_SPRITE : SLOT_UNCRAFTABLE_SPRITE, x, y, getSheen(List.of(entry)));
 			if (mouseX >= x && mouseX < x + CELL && mouseY >= y && mouseY < y + CELL) {
 				graphics.setTooltipForNextFrame(Minecraft.getInstance().font, result, mouseX, mouseY);
 			}
 		}
+	}
+
+	private static int getSheen(final List<RecipeDisplayEntry> entries) {
+		int result = ClientSheen.NONE;
+		for (RecipeDisplayEntry entry : entries) {
+			int sheen = ClientSheen.getRecipeSheen(entry.id().index());
+			if (sheen != ClientSheen.NONE && sheen != ClientSheen.DIMMED) {
+				return sheen;
+			}
+
+			if (sheen == ClientSheen.DIMMED) {
+				result = sheen;
+			}
+		}
+
+		return result;
+	}
+
+	private static void extractSheen(final GuiGraphicsExtractor graphics, final Identifier sprite, final int x, final int y, final int sheen) {
+		if (sheen == ClientSheen.DIMMED) {
+			graphics.fill(x + 1, y + 1, x + 1 + BOX, y + 1 + BOX, DIMMED_COLOR);
+			return;
+		}
+
+		InkMasks.Mask mask = sheen == ClientSheen.NONE ? null : InkMasks.get(sprite.withPath(path -> "textures/gui/sprites/" + path + ".png"), INK_BELOW);
+		if (mask == null) {
+			return;
+		}
+
+		graphics.fill(x + 4, y + 4, x + 20, y + 20, ARGB.color(WASH_ALPHA, sheen));
+		int ink = ARGB.srgbLerp(INK_DEPTH, sheen, 0xFF000000);
+		graphics.blit(RenderPipelines.GUI_TEXTURED, mask.location(), x + 1, y + 1, 0.0F, 0.0F, BOX, BOX, mask.width(), mask.height(), mask.width(), mask.height(), ink);
 	}
 
 	private static Identifier getSprite(final RecipeCollection collection) {

@@ -18,6 +18,7 @@ public class ClientAtlas {
 	private static final List<String> PALETTE = new ArrayList<>();
 	private static final Long2ObjectMap<String> STRUCTURES = new Long2ObjectOpenHashMap<>();
 	private static List<AtlasMarker> markers = List.of();
+	private static int version;
 
 	static {
 		TILES.defaultReturnValue(WorldAtlas.NO_TILE);
@@ -38,6 +39,12 @@ public class ClientAtlas {
 		for (int i = 0; i < payload.positions().length; i++) {
 			TILES.put(payload.positions()[i], payload.tiles()[i]);
 		}
+
+		version++;
+	}
+
+	public static int getVersion() {
+		return version;
 	}
 
 	public static void receiveMarkers(final List<AtlasMarker> received) {

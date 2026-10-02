@@ -1,0 +1,243 @@
+package com.khrux.handbook.client.gui.screens;
+
+import com.khrux.handbook.Handbook;
+import com.khrux.handbook.client.ClientPassphrases;
+import com.khrux.handbook.client.gui.components.DyeSwatches;
+import com.khrux.handbook.client.gui.components.EnderInk;
+import com.khrux.handbook.client.gui.components.HandbookTabButton;
+import com.khrux.handbook.client.gui.components.InkButton;
+import com.khrux.handbook.network.protocol.PassphraseSlotsPayload;
+import com.khrux.handbook.world.entity.player.PassphraseSlot;
+import com.mojang.blaze3d.platform.InputConstants;
+import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.screens.inventory.PageButton;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.item.DyeColor;
+import org.jspecify.annotations.Nullable;
+
+public class EnderPage {
+	private static final int PUPIL_COLOR = 0xFFD8FFF4;
+	private static final int OPTION_HOLLOW_COLOR = 0xFFB2B0AA;
+	private static final int FOLLOWER_ROWS = 10;
+	private static final Identifier PAGE_LOCATION = Handbook.id("textures/gui/ender_page.png");
+	private static final Identifier PASSPHRASE_ICON = Handbook.id("textures/gui/icon/passphrase.png");
+	private static final String[] DRAFTS = new String[PassphraseSlot.SLOTS];
+	private static int selected;
+	private static int followerPage;
+	private final Font font = Minecraft.getInstance().font;
+	private final HandbookScreen screen;
+	private final int left;
+	private final int top;
+	private @Nullable EditBox passphraseBox;
+	private @Nullable InkButton followButton;
+	private @Nullable InkButton leaveButton;
+	private @Nullable InkButton shareButton;
+	private @Nullable PageButton backButton;
+	private @Nullable PageButton forwardButton;
+
+	public EnderPage(final HandbookScreen screen, final int left, final int top) {
+		this.screen = screen;
+		this.left = left;
+		this.top = top;
+	}
+
+	public static Component getPullOut(final PassphraseSlot slot) {
+		if (slot.isEmpty()) {
+			return Component.translatable("handbook.ender.empty_slot");
+		}
+
+		String passphrase = ClientPassphrases.getPassphrase(slot.hash());
+		return passphrase == null ? Component.translatable("handbook.ender.hidden_passphrase") : Component.literal(passphrase);
+	}
+
+	public static int getSlotColor(final PassphraseSlot slot) {
+		int color = DyeColor.byId(slot.color()).getTextureDiffuseColor();
+		return slot.isEmpty() ? ARGB.color(110, color) : color;
+	}
+
+	public void init(final Consumer<AbstractWidget> widgets) {
+		for (int i = 0; i < PassphraseSlot.SLOTS; i++) {
+			PassphraseSlot slot = ClientPassphrases.get(i).slot();
+			int index = i;
+			widgets.accept(HandbookTabButton.passphrase(
+				this.left + HandbookScreen.COVER_LEFT, this.top + 20 + i * 25, i == selected, true, PASSPHRASE_ICON, getSlotColor(slot), getPullOut(slot), () -> {
+					selected = index;
+					followerPage = 0;
+					this.screen.rebuild();
+				}
+			));
+		}
+
+		this.passphraseBox = new EditBox(this.font, this.left + 27, this.top + 51, 108, 10, Component.translatable("handbook.ender.passphrase"));
+		this.passphraseBox.setMaxLength(PassphraseSlot.MAX_PASSPHRASE_LENGTH);
+		this.passphraseBox.setBordered(false);
+		this.passphraseBox.setTextColor(EnderInk.color(this.left + 27, this.top + 51));
+		this.passphraseBox.setTextShadow(false);
+		this.passphraseBox.setValue(this.getDraft());
+		this.passphraseBox.setResponder(value -> DRAFTS[selected] = value);
+		widgets.accept(this.passphraseBox);
+		this.followButton = new InkButton(this.left + 26, this.top + 65, Component.translatable("handbook.ender.follow"), this::follow);
+		widgets.accept(this.followButton);
+		Component leave = Component.translatable("handbook.ender.leave");
+		this.leaveButton = new InkButton(this.left + 138 - this.font.width(leave), this.top + 65, leave, () -> {
+			DRAFTS[selected] = "";
+			ClientPassphrases.follow(selected, "");
+			this.screen.rebuild();
+		});
+		widgets.accept(this.leaveButton);
+		widgets.accept(new DyeSwatches(this.left + 29, this.top + 86, () -> this.getSlot().color(), color -> ClientPassphrases.changeSettings(selected, color, this.getSlot().enderInk())));
+		for (boolean enderInk : List.of(true, false)) {
+			InkButton button = new InkButton(
+				this.left + 34,
+				this.top + (enderInk ? 131 : 142),
+				Component.translatable(enderInk ? "handbook.ender.ender_ink" : "handbook.ender.plain_ink"),
+				() -> ClientPassphrases.changeSettings(selected, this.getSlot().color(), enderInk)
+			);
+			button.setTooltip(Tooltip.create(Component.translatable(enderInk ? "handbook.ender.ender_ink.description" : "handbook.ender.plain_ink.description")));
+			widgets.accept(button);
+		}
+
+		Component share = Component.translatable("handbook.ender.share_plain_ink");
+		this.shareButton = new InkButton(this.left + 81 - this.font.width(share) / 2, this.top + 158, share, () -> ClientPassphrases.sharePlainInk(selected));
+		this.shareButton.setTooltip(Tooltip.create(Component.translatable("handbook.ender.share_plain_ink.description")));
+		widgets.accept(this.shareButton);
+		this.backButton = new PageButton(this.left + 194, this.top + 163, false, button -> followerPage--, true);
+		widgets.accept(this.backButton);
+		this.forwardButton = new PageButton(this.left + 244, this.top + 163, true, button -> followerPage++, true);
+		widgets.accept(this.forwardButton);
+		this.tick();
+	}
+
+	private PassphraseSlot getSlot() {
+		return ClientPassphrases.get(selected).slot();
+	}
+
+	private String getDraft() {
+		if (DRAFTS[selected] != null) {
+			return DRAFTS[selected];
+		}
+
+		PassphraseSlot slot = this.getSlot();
+		String passphrase = slot.isEmpty() ? null : ClientPassphrases.getPassphrase(slot.hash());
+		return passphrase == null ? "" : passphrase;
+	}
+
+	private void follow() {
+		if (this.passphraseBox == null || this.passphraseBox.getValue().isEmpty()) {
+			return;
+		}
+
+		ClientPassphrases.follow(selected, this.passphraseBox.getValue());
+		DRAFTS[selected] = null;
+		followerPage = 0;
+		this.passphraseBox.setFocused(false);
+	}
+
+	public boolean keyPressed(final KeyEvent event) {
+		if (this.passphraseBox != null && this.passphraseBox.isFocused() && (event.key() == InputConstants.KEY_RETURN || event.key() == InputConstants.KEY_NUMPADENTER)) {
+			this.follow();
+			return true;
+		}
+
+		return false;
+	}
+
+	public void tick() {
+		PassphraseSlotsPayload.SlotView view = ClientPassphrases.get(selected);
+		PassphraseSlot slot = view.slot();
+		String value = this.passphraseBox == null ? "" : this.passphraseBox.getValue();
+		this.followButton.visible = !value.isEmpty() && !ClientPassphrases.hash(value).equals(slot.hash());
+		this.leaveButton.visible = !slot.isEmpty();
+		this.shareButton.visible = !slot.isEmpty();
+		int pages = Math.max(1, (view.followers().size() + FOLLOWER_ROWS - 1) / FOLLOWER_ROWS);
+		followerPage = Math.clamp(followerPage, 0, pages - 1);
+		this.backButton.visible = followerPage > 0;
+		this.forwardButton.visible = followerPage < pages - 1;
+		this.passphraseBox.setTextColor(EnderInk.color(this.left + 27, this.top + 51));
+	}
+
+	public void extractBackground(final GuiGraphicsExtractor graphics) {
+		graphics.blit(RenderPipelines.GUI_TEXTURED, PAGE_LOCATION, this.left, this.top, 0.0F, 0.0F, HandbookScreen.WIDTH, HandbookScreen.HEIGHT, HandbookScreen.WIDTH, HandbookScreen.HEIGHT);
+		EnderInk.stars(graphics, this.left + 13, this.top + 20, 274, 164, this.left + HandbookScreen.SEAM_X);
+	}
+
+	public void extractRenderState(final GuiGraphicsExtractor graphics) {
+		PassphraseSlotsPayload.SlotView view = ClientPassphrases.get(selected);
+		PassphraseSlot slot = view.slot();
+		EnderInk.centeredText(graphics, this.font, Component.translatable("handbook.ender.slot", selected + 1), this.left + 80, this.top + 30);
+		if (this.passphraseBox != null && this.passphraseBox.getValue().isEmpty() && !this.passphraseBox.isFocused()) {
+			Component hint = slot.isEmpty() ? Component.translatable("handbook.ender.passphrase_hint") : Component.translatable("handbook.ender.hidden_passphrase");
+			EnderInk.text(graphics, this.font, hint, this.left + 27, this.top + 51, 110);
+		}
+
+		if (this.leaveButton.visible) {
+			int start = this.followButton.visible ? this.followButton.getX() + this.followButton.getWidth() + 4 : this.left + 24;
+			int end = this.leaveButton.getX() - 4;
+			int y = this.top + 69;
+			graphics.fill(start, y, end, y + 1, EnderInk.color(start, y, 200));
+			graphics.fill(end - 2, y - 2, end - 1, y - 1, EnderInk.color(end, y));
+			graphics.fill(end - 1, y - 1, end, y, EnderInk.color(end, y));
+			graphics.fill(end - 1, y + 1, end, y + 2, EnderInk.color(end, y));
+			graphics.fill(end - 2, y + 2, end - 1, y + 3, EnderInk.color(end, y));
+		}
+
+		EnderInk.text(graphics, this.font, Component.translatable("handbook.ender.color"), this.left + 22, this.top + 77, 255);
+		EnderInk.text(graphics, this.font, Component.translatable("handbook.ender.ink"), this.left + 22, this.top + 121, 255);
+		this.extractOption(graphics, this.left + 27, this.top + 136, slot.enderInk());
+		this.extractOption(graphics, this.left + 27, this.top + 147, !slot.enderInk());
+		EnderInk.centeredText(graphics, this.font, Component.translatable("handbook.ender.followers", view.followers().size()), this.left + 220, this.top + 30);
+		if (view.followers().isEmpty()) {
+			int y = this.top + 50;
+			for (FormattedCharSequence line : this.font.split(Component.translatable("handbook.ender.no_followers"), 120)) {
+				graphics.text(this.font, line, this.left + 163, y, EnderInk.color(this.left + 163, y, 150), false);
+				y += 10;
+			}
+
+			return;
+		}
+
+		List<PassphraseSlotsPayload.FollowerView> followers = view.followers();
+		int start = followerPage * FOLLOWER_ROWS;
+		for (int i = start; i < Math.min(followers.size(), start + FOLLOWER_ROWS); i++) {
+			PassphraseSlotsPayload.FollowerView follower = followers.get(i);
+			int y = this.top + 50 + (i - start) * 11;
+			this.extractInkMark(graphics, this.left + 167, y + 3, follower.enderInk());
+			EnderInk.text(graphics, this.font, Component.literal(follower.name()), this.left + 176, y, follower.online() ? 255 : 110);
+		}
+
+		if (followers.size() > FOLLOWER_ROWS) {
+			EnderInk.centeredText(graphics, this.font, Component.literal(followerPage + 1 + "/" + ((followers.size() + FOLLOWER_ROWS - 1) / FOLLOWER_ROWS)), this.left + 231, this.top + 166);
+		}
+	}
+
+	private void extractOption(final GuiGraphicsExtractor graphics, final int x, final int y, final boolean chosen) {
+		EnderInk.diamond(graphics, x, y, 3, EnderInk.color(x, y, chosen ? 255 : 150));
+		if (!chosen) {
+			EnderInk.diamond(graphics, x, y, 2, OPTION_HOLLOW_COLOR);
+		} else {
+			graphics.fill(x, y, x + 1, y + 1, PUPIL_COLOR);
+		}
+	}
+
+	private void extractInkMark(final GuiGraphicsExtractor graphics, final int x, final int y, final boolean enderInk) {
+		if (enderInk) {
+			EnderInk.diamond(graphics, x, y, 3, EnderInk.color(x, y));
+			graphics.fill(x, y, x + 1, y + 1, PUPIL_COLOR);
+		} else {
+			EnderInk.ring(graphics, x, y, 3.0F, EnderInk.color(x, y, 190));
+		}
+	}
+
+}
