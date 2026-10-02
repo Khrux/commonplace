@@ -9,6 +9,7 @@ import com.khrux.handbook.client.gui.components.HandbookTabButton;
 import com.khrux.handbook.client.renderer.PageSnapshot;
 import com.khrux.handbook.world.item.HandbookItem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.ScrollWheelHandler;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
@@ -17,6 +18,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
+import org.joml.Vector2i;
 import org.jspecify.annotations.Nullable;
 
 public class HandbookScreen extends Screen {
@@ -33,6 +35,7 @@ public class HandbookScreen extends Screen {
 	private static HandbookTab lastTab = HandbookTab.RECIPES;
 	private final @Nullable Screen parent;
 	private final HandbookTab tab;
+	private final ScrollWheelHandler scrollWheelHandler = new ScrollWheelHandler();
 	private @Nullable RecipesPage recipes;
 	private @Nullable NotesPage notes;
 	private int left;
@@ -139,7 +142,7 @@ public class HandbookScreen extends Screen {
 		}
 
 		for (int i = 0; i < edges; i++) {
-			int x = i < before ? left + 10 + i * 2 : left + 290 - (edges - 1 - i) * 2;
+			int x = i < before ? left + 12 + i * 2 : left + 288 - (edges - 1 - i) * 2;
 			graphics.fill(x, top + 18, x + 1, top + 186, PAGE_EDGE_COLOR);
 		}
 	}
@@ -151,6 +154,16 @@ public class HandbookScreen extends Screen {
 			graphics.fill(seam - i - 1, this.top + 19, seam - i, this.top + 185, color);
 			graphics.fill(seam + i, this.top + 19, seam + i + 1, this.top + 185, color);
 		}
+	}
+
+	@Override
+	public boolean mouseScrolled(final double x, final double y, final double scrollX, final double scrollY) {
+		Vector2i wheel = this.scrollWheelHandler.onMouseScroll(scrollX, scrollY);
+		for (int i = 0; i < Math.abs(wheel.y); i++) {
+			super.mouseScrolled(x, y, 0.0, Math.signum(wheel.y));
+		}
+
+		return true;
 	}
 
 	@Override

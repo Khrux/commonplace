@@ -207,6 +207,9 @@ def draw_book(style):
             for y in range(PAGE_TOP, PAGE_BOTTOM):
                 for x in range(left, right):
                     pixels[x, y] = mix(s["page"], s["page_dark"], 0.6 if abs(x - gutter_side) < 2 else 0.0)
+        for y in range(PAGE_TOP, PAGE_BOTTOM):
+            pixels[LEFT_PAGE[0] + 1, y] = s["page_edge"] + (255,)
+            pixels[RIGHT_PAGE[1] - 2, y] = s["page_edge"] + (255,)
     for y in range(PAGE_TOP - 2, PAGE_BOTTOM + 2):
         pixels[LEFT_PAGE[1] - 1, y] = s["page_edge"] + (255,)
         pixels[RIGHT_PAGE[0], y] = s["page_edge"] + (255,)
@@ -429,6 +432,10 @@ def main():
     canvas = Image.new("RGBA", (CANVAS_WIDTH, CANVAS_HEIGHT), (0, 0, 0, 0))
     canvas.paste(draw_book(style), (BOOK_LEFT, BOOK_TOP))
     canvas.save(gui / "book.png")
+    if style == "bare_bones":
+        field_guide = assets.parent / "fieldguide" / "textures" / "gui"
+        field_guide.mkdir(parents=True, exist_ok=True)
+        canvas.save(field_guide / "book.png")
     cover = Image.new("RGBA", (CANVAS_WIDTH, CANVAS_HEIGHT), (0, 0, 0, 0))
     cover.paste(draw_cover_mask(style), (BOOK_LEFT, BOOK_TOP))
     cover.save(gui / "book_cover.png")

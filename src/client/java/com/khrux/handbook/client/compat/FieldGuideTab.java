@@ -9,8 +9,10 @@ import com.khrux.handbook.client.gui.screens.HandbookScreen;
 import com.khrux.handbook.client.gui.screens.HandbookTab;
 import com.khrux.handbook.client.renderer.PageSnapshot;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
+import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.ScrollWheelHandler;
 import net.minecraft.client.gui.screens.Screen;
 
 public class FieldGuideTab {
@@ -37,6 +39,15 @@ public class FieldGuideTab {
 			int top = (height - HandbookScreen.HEIGHT) / 2;
 			HandbookTabButton.addMainTabs(left + HandbookScreen.COVER_LEFT, top + HandbookScreen.COVER_TOP, HandbookTab.FIELD_GUIDE, Screens.getWidgets(screen)::add);
 			ScreenEvents.remove(screen).register(current -> PageSnapshot.capture(HandbookTab.FIELD_GUIDE, left, top));
+			ScrollWheelHandler scrollWheelHandler = new ScrollWheelHandler();
+			ScreenMouseEvents.allowMouseScroll(screen).register((current, mouseX, mouseY, scrollX, scrollY) -> {
+				int wheel = scrollWheelHandler.onMouseScroll(scrollX, scrollY).y;
+				for (int i = 0; i < Math.abs(wheel); i++) {
+					current.mouseScrolled(mouseX, mouseY, 0.0, Math.signum(wheel));
+				}
+
+				return false;
+			});
 			ScreenEvents.afterExtract(screen).register((current, graphics, mouseX, mouseY, a) -> HandbookScreen.extractPageEdges(graphics, left, top, HandbookTab.FIELD_GUIDE));
 		}
 	}
