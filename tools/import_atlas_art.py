@@ -177,7 +177,7 @@ def resolve_providers(archive):
         if name.endswith(".json") and name.startswith(BIOME_PREFIX):
             raw["minecraft:" + name[len(BIOME_PREFIX):-5]] = read_json(archive, name)
         elif name.endswith(".json") and name.startswith(FEATURE_PREFIX):
-            raw["handbook:" + name[len(FEATURE_PREFIX):-5]] = read_json(archive, name)
+            raw["commonplace:" + name[len(FEATURE_PREFIX):-5]] = read_json(archive, name)
     providers = {key: resolve_provider(value) for key, value in raw.items() if "parent" not in value}
     for key, value in raw.items():
         if "parent" in value:

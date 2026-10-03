@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "handbook:item/handbook",
-    "layer1": "handbook:item/handbook_overlay"
-  }
-}

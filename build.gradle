@@ -16,7 +16,7 @@ loom {
 	}
 
 	mods {
-		"handbook" {
+		"commonplace" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}
@@ -30,7 +30,7 @@ fabricApi {
 
 	configureTests {
 		createSourceSet = true
-		modId = "handbook-gametest"
+		modId = "commonplace-gametest"
 		enableGameTests = true
 		enableClientGameTests = false
 		eula = true
@@ -44,8 +44,11 @@ repositories {
 			includeGroup "com.terraformersmc"
 		}
 	}
-	flatDir {
-		dirs "libs"
+	maven {
+		url = "https://api.modrinth.com/maven"
+		content {
+			includeGroup "maven.modrinth"
+		}
 	}
 }
 
@@ -53,12 +56,13 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-	compileOnly files("libs/fieldguide-1.20.0+26.3-fabric.jar")
+	compileOnly "maven.modrinth:field-guide:${project.fieldguide_version}"
+	localRuntime "maven.modrinth:field-guide:${project.fieldguide_version}"
+	include "maven.modrinth:field-guide:${project.fieldguide_version}"
 	compileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 	localRuntime "com.terraformersmc:modmenu:${project.modmenu_version}"
-	include "local:fieldguide:1.20.0+26.3-fabric"
-	gametestCompileOnly files("libs/fieldguide-1.20.0+26.3-fabric.jar")
-	gametestRuntimeOnly files("libs/fieldguide-1.20.0+26.3-fabric.jar")
+	gametestCompileOnly "maven.modrinth:field-guide:${project.fieldguide_version}"
+	gametestRuntimeOnly "maven.modrinth:field-guide:${project.fieldguide_version}"
 }
 
 processResources {
@@ -67,6 +71,14 @@ processResources {
 
 	filesMatching("fabric.mod.json") {
 		expand "version": version
+	}
+}
+
+jar {
+	inputs.property "archivesName", project.base.archivesName
+
+	from("LICENSE") {
+		rename { "${it}_${inputs.properties.archivesName}" }
 	}
 }
 

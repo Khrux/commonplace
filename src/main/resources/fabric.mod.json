@@ -1,26 +1,32 @@
 {
 	"schemaVersion": 1,
-	"id": "handbook",
+	"id": "commonplace",
 	"version": "${version}",
-	"name": "Handbook",
+	"name": "Commonplace",
 	"description": "One book for your recipes, the creatures you've met, the land you've mapped and your own notes, shared with whoever knows the passphrase.",
 	"authors": [
 		"khrux"
 	],
+	"contact": {
+		"homepage": "https://modrinth.com/mod/commonplace",
+		"sources": "https://github.com/Khrux/commonplace",
+		"issues": "https://github.com/Khrux/commonplace/issues"
+	},
 	"license": "CC-BY-NC-SA-4.0",
+	"icon": "assets/commonplace/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.khrux.handbook.Handbook"
+			"com.khrux.commonplace.Commonplace"
 		],
 		"client": [
-			"com.khrux.handbook.client.HandbookClient"
+			"com.khrux.commonplace.client.CommonplaceClient"
 		],
 		"fabric-datagen": [
-			"com.khrux.handbook.datagen.HandbookDataGenerator"
+			"com.khrux.commonplace.datagen.CommonplaceDataGenerator"
 		],
 		"modmenu": [
-			"com.khrux.handbook.client.HandbookModMenu"
+			"com.khrux.commonplace.client.CommonplaceModMenu"
 		]
 	},
 	"depends": {
@@ -33,9 +39,9 @@
 		"modmenu": "*"
 	},
 	"mixins": [
-		"handbook.mixins.json",
+		"commonplace.mixins.json",
 		{
-			"config": "handbook.client.mixins.json",
+			"config": "commonplace.client.mixins.json",
 			"environment": "client"
 		}
 	],

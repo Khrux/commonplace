@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:crafting_dye",
-  "dye": "#minecraft:dyes",
-  "result": {
-    "id": "handbook:handbook"
-  },
-  "target": "handbook:handbook"
-}

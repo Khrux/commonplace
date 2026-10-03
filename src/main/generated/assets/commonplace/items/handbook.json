@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "commonplace:item/handbook",
+    "tints": [
+      {
+        "type": "minecraft:dye",
+        "default": -7587034
+      }
+    ]
+  }
+}

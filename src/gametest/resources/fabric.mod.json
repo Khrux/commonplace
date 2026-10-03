@@ -1,15 +1,15 @@
 {
 	"schemaVersion": 1,
-	"id": "handbook-gametest",
+	"id": "commonplace-gametest",
 	"version": "1.0.0",
-	"name": "Handbook Game Tests",
+	"name": "Commonplace Game Tests",
 	"environment": "*",
 	"entrypoints": {
 		"fabric-gametest": [
-			"com.khrux.handbook.world.level.syndicate.SyndicationGameTests"
+			"com.khrux.commonplace.world.level.syndicate.SyndicationGameTests"
 		]
 	},
 	"depends": {
-		"handbook": "*"
+		"commonplace": "*"
 	}
 }

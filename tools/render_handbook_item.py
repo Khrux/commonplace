@@ -102,7 +102,7 @@ def main():
     items = assets / "textures" / "item"
     items.mkdir(parents=True, exist_ok=True)
     cover, overlay = draw(style)
-    cover.save(items / "handbook.png")
+    cover.save(items / "commonplace.png")
     overlay.save(items / "handbook_overlay.png")
 
 

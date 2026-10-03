@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:crafting_dye",
+  "dye": "#minecraft:dyes",
+  "result": {
+    "id": "commonplace:handbook"
+  },
+  "target": "commonplace:handbook"
+}
