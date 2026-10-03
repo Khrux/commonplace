@@ -16,16 +16,24 @@ import java.util.Optional;
 import java.util.UUID;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.cauldron.CauldronInteractions;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -536,5 +544,22 @@ public class SyndicationGameTests {
 
 	private static void report(final String what, final long nanos, final int count) {
 		System.out.println("HANDBOOK PERF " + what + ": total " + String.format("%.2f", nanos / 1.0E6) + " ms, each " + String.format("%.3f", nanos / 1.0E6 / count) + " ms");
+	}
+
+	@GameTest(maxTicks = 100)
+	public void waterCauldronWashesTheDyeOut(final GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.getAbilities().instabuild = false;
+		ItemStack book = new ItemStack(CommonplaceItems.HANDBOOK);
+		book.set(DataComponents.DYED_COLOR, new DyedItemColor(0xFF8DB15F));
+		player.setItemInHand(InteractionHand.MAIN_HAND, book);
+		BlockPos pos = helper.absolutePos(new BlockPos(1, 1, 1));
+		helper.getLevel().setBlockAndUpdate(pos, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 3));
+		BlockState state = helper.getLevel().getBlockState(pos);
+		CauldronInteractions.WATER.get(book).interact(state, helper.getLevel(), pos, player, InteractionHand.MAIN_HAND, book);
+		helper.assertTrue(!player.getMainHandItem().has(DataComponents.DYED_COLOR), "the cauldron should wash the dye out of the Handbook");
+		helper.assertTrue(player.getMainHandItem().is(CommonplaceItems.HANDBOOK), "the Handbook should still be in hand");
+		remove(helper, player);
+		helper.succeed();
 	}
 }
