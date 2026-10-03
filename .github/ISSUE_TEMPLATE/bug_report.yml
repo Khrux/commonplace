@@ -1,0 +1,82 @@
+name: Bug report
+description: Something in Commonplace is broken or behaves strangely.
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you saw, and what you expected to see instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: How can I make it happen?
+      description: The steps that lead to the problem, as exactly as you can.
+      placeholder: |
+        1. Open the Handbook on the Atlas tab
+        2. Zoom all the way out
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: commonplace-version
+    attributes:
+      label: Commonplace version
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: input
+    id: minecraft-version
+    attributes:
+      label: Minecraft, Fabric Loader and Fabric API versions
+      placeholder: 26.3, Loader 0.19.5, Fabric API 0.161.0
+    validations:
+      required: true
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where does it happen?
+      options:
+        - Singleplayer
+        - On a server
+    validations:
+      required: true
+  - type: dropdown
+    id: passphrase
+    attributes:
+      label: Does it involve passphrases?
+      description: Sharing, the Ender page, passphrase notebooks or passphrase colours.
+      options:
+        - "No"
+        - "Yes"
+    validations:
+      required: true
+  - type: dropdown
+    id: alone
+    attributes:
+      label: Does it still happen with only Commonplace and Fabric API installed?
+      description: Removing other mods for a moment is the quickest way to tell whether it's Commonplace or a clash with another mod.
+      options:
+        - "Yes"
+        - "No, only alongside other mods (please list them below)"
+        - I haven't tried
+    validations:
+      required: true
+  - type: textarea
+    id: mods
+    attributes:
+      label: Other mods, shaders and resource packs
+      description: Especially anything that changes rendering, the inventory, first-person hands or the recipe book.
+  - type: textarea
+    id: log
+    attributes:
+      label: Log or crash report
+      description: Paste `logs/latest.log`, or the file from `crash-reports/` if the game crashed. A link to mclo.gs is fine too.
+      render: text
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or video
+      description: Drag images or clips in here, especially for visual problems.
