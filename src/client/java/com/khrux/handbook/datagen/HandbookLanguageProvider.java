@@ -14,6 +14,39 @@ public class HandbookLanguageProvider extends FabricLanguageProvider {
 	@Override
 	public void generateTranslations(final HolderLookup.Provider registries, final FabricLanguageProvider.TranslationBuilder translationBuilder) {
 		translationBuilder.add(HandbookItems.HANDBOOK, "Handbook");
+		translationBuilder.add("options.handbook.title", "Handbook Options");
+		translationBuilder.add("options.handbook.recipe_sheen", "Recipe Passphrase Colour");
+		translationBuilder.add("options.handbook.recipe_sheen.tooltip", "How recipes shared through a passphrase show its colour.");
+		translationBuilder.add("options.handbook.recipe_sheen.ink", "Inked Box Lines");
+		translationBuilder.add("options.handbook.recipe_sheen.square", "Square Outline");
+		translationBuilder.add("options.handbook.field_guide_sketch", "Field Guide Sketch");
+		translationBuilder.add("options.handbook.field_guide_sketch.tooltip", "Draw Field Guide images as sepia pencil sketches. Off shows Field Guide's own coloured images.");
+		translationBuilder.add("options.handbook.map_and_field_guide_sheen", "Map & Field Guide Colours");
+		translationBuilder.add(
+			"options.handbook.map_and_field_guide_sheen.tooltip",
+			"When the atlas and Field Guide show passphrase colours. Highlight Only keeps them in plain ink until you click a colour ribbon under the book."
+		);
+		translationBuilder.add("options.handbook.map_and_field_guide_sheen.always", "Always");
+		translationBuilder.add("options.handbook.map_and_field_guide_sheen.highlighted", "Highlight Only");
+		translationBuilder.add("options.handbook.ender_page_motion", "Ender Page Motion");
+		translationBuilder.add("options.handbook.ender_page_motion.tooltip", "Shimmering ink and drifting stars on the Ender page. Off keeps them still.");
+		translationBuilder.add("options.handbook.compass_coordinates", "Compass Coordinates");
+		translationBuilder.add("options.handbook.compass_coordinates.tooltip", "Where your coordinates show while a compass is in the compass slot.");
+		translationBuilder.add("options.handbook.compass_coordinates.top_right", "Top Right");
+		translationBuilder.add("options.handbook.compass_coordinates.top_left", "Top Left");
+		translationBuilder.add("options.handbook.compass_coordinates.bottom_right", "Bottom Right");
+		translationBuilder.add("options.handbook.compass_coordinates.bottom_left", "Bottom Left");
+		translationBuilder.add("options.handbook.compass_coordinates.hidden", "Hidden");
+		translationBuilder.add("options.handbook.page_turn_sound", "Page Turn Sound");
+		translationBuilder.add("options.handbook.page_turn_sound.tooltip", "Play a page turn when scrolling through the tabs of the Handbook in your hand.");
+		translationBuilder.add("options.handbook.tab_scroll_key", "Tab Scroll Key");
+		translationBuilder.add(
+			"options.handbook.tab_scroll_key.tooltip", "Hold this key and scroll with the Handbook in your hand to turn to the next or previous tab. Off scrolls the hotbar as usual."
+		);
+		translationBuilder.add("options.handbook.tab_scroll_key.alt", "Alt");
+		translationBuilder.add("options.handbook.tab_scroll_key.control", "Ctrl");
+		translationBuilder.add("options.handbook.tab_scroll_key.shift", "Shift");
+		translationBuilder.add("options.handbook.tab_scroll_key.off", "Off");
 		translationBuilder.add(HandbookItems.ENDER_QUILL, "Ender Quill");
 		translationBuilder.add("handbook.tab.ender", "Ender");
 		translationBuilder.add("handbook.ender.slot", "Passphrase %s");

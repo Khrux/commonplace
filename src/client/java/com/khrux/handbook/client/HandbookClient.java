@@ -1,6 +1,7 @@
 package com.khrux.handbook.client;
 
 import com.khrux.handbook.Handbook;
+import com.khrux.handbook.HandbookConfig;
 import com.khrux.handbook.client.atlas.ClientAtlas;
 import com.khrux.handbook.client.compat.FieldGuideTab;
 import com.khrux.handbook.client.gui.hud.CompassCoordinates;
@@ -32,6 +33,7 @@ import net.minecraft.world.level.Level;
 public class HandbookClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
+		HandbookConfig.load();
 		ClientPlayNetworking.registerGlobalReceiver(NotebookPayload.TYPE, (payload, context) -> ClientHandbook.get().notebook().set(payload));
 		ClientPlayNetworking.registerGlobalReceiver(NoteEditPayload.TYPE, (payload, context) -> ClientHandbook.get().notebook().receive(payload));
 		ClientPlayNetworking.registerGlobalReceiver(NoteOptionsPayload.TYPE, (payload, context) -> ClientHandbook.get().notebook().setOptions(payload.options()));

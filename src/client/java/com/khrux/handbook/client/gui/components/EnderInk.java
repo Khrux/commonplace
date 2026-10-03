@@ -1,5 +1,6 @@
 package com.khrux.handbook.client.gui.components;
 
+import com.khrux.handbook.HandbookConfig;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
@@ -16,6 +17,7 @@ public class EnderInk {
 	private static final int[] STAR_COLORS = {0xBFF2E8, 0xD6C2FA, 0xFFFFFF, 0x9FE6D6};
 	private static final int STARS = 150;
 	private static final float[][] STAR_FIELD = new float[STARS][5];
+	private static float forcedTeal = -1.0F;
 
 	static {
 		RandomSource random = RandomSource.create(0x3E7D3L);
@@ -28,9 +30,29 @@ public class EnderInk {
 		}
 	}
 
+	public static void forceTeal(final float teal) {
+		forcedTeal = teal;
+	}
+
+	public static boolean isForced() {
+		return forcedTeal >= 0.0F;
+	}
+
+	public static void release() {
+		forcedTeal = -1.0F;
+	}
+
+	private static float seconds() {
+		return forcedTeal < 0.0F && HandbookConfig.get().enderPageMotion ? Util.getMillis() / 1000.0F : 0.0F;
+	}
+
+	public static float getTeal(final float x, final float y) {
+		float phase = seconds() / 1.8F + (x + y * 0.6F) / 70.0F;
+		return (Mth.sin(phase) + 1.0F) / 2.0F;
+	}
+
 	public static int color(final int x, final int y) {
-		float phase = Util.getMillis() / 1800.0F + (x + y * 0.6F) / 70.0F;
-		return ARGB.srgbLerp((Mth.sin(phase) + 1.0F) / 2.0F, VIOLET, TEAL);
+		return ARGB.srgbLerp(forcedTeal < 0.0F ? getTeal(x, y) : forcedTeal, VIOLET, TEAL);
 	}
 
 	public static int color(final int x, final int y, final int alpha) {
@@ -80,7 +102,7 @@ public class EnderInk {
 	}
 
 	public static void wavyLine(final GuiGraphicsExtractor graphics, final int x0, final int x1, final int y, final int alpha) {
-		float drift = Util.getMillis() / 900.0F;
+		float drift = seconds() / 0.9F;
 		for (int x = x0; x < x1; x++) {
 			int offset = Math.round(Mth.sin(x / 3.0F + drift) * 0.7F);
 			graphics.fill(x, y + offset, x + 1, y + offset + 1, color(x, y, alpha));
@@ -88,27 +110,41 @@ public class EnderInk {
 	}
 
 	public static void stars(final GuiGraphicsExtractor graphics, final int left, final int top, final int width, final int height, final int gutterX) {
-		float time = Util.getMillis() / 1000.0F;
-		for (float[] star : STAR_FIELD) {
-			float x = (star[0] * width + time * star[2] * 1.5F) % width;
-			float y = ((star[1] * height - time * star[2] * 2.5F) % height + height) % height;
-			float twinkle = (Mth.sin(time * star[2] * 1.7F + star[3]) + 1.0F) / 2.0F;
-			int alpha = (int)(40 + twinkle * twinkle * 215);
-			int color = ARGB.color(alpha, STAR_COLORS[(int)star[4]]);
-			int px = left + (int)x;
-			int py = top + (int)y;
-			if (Math.abs(px - gutterX) < 4) {
-				continue;
-			}
+		if (forcedTeal >= 0.0F) {
+			return;
+		}
 
+		forEachStar(width, height, gutterX - left, (x, y, color, faint) -> {
+			int px = left + x;
+			int py = top + y;
 			graphics.fill(px, py, px + 1, py + 1, color);
-			if (star[2] > 1.2F && twinkle > 0.6F) {
-				int faint = ARGB.color(alpha / 3, STAR_COLORS[(int)star[4]]);
+			if (faint != 0) {
 				graphics.fill(px - 1, py, px, py + 1, faint);
 				graphics.fill(px + 1, py, px + 2, py + 1, faint);
 				graphics.fill(px, py - 1, px + 1, py, faint);
 				graphics.fill(px, py + 1, px + 1, py + 2, faint);
 			}
+		});
+	}
+
+	public static void forEachStar(final int width, final int height, final int gutterX, final EnderInk.StarOutput output) {
+		float time = seconds();
+		for (float[] star : STAR_FIELD) {
+			int x = (int)((star[0] * width + time * star[2] * 1.5F) % width);
+			int y = (int)(((star[1] * height - time * star[2] * 2.5F) % height + height) % height);
+			if (Math.abs(x - gutterX) < 4) {
+				continue;
+			}
+
+			float twinkle = (Mth.sin(time * star[2] * 1.7F + star[3]) + 1.0F) / 2.0F;
+			int alpha = (int)(40 + twinkle * twinkle * 215);
+			int color = STAR_COLORS[(int)star[4]];
+			output.accept(x, y, ARGB.color(alpha, color), star[2] > 1.2F && twinkle > 0.6F ? ARGB.color(alpha / 3, color) : 0);
 		}
+	}
+
+	@FunctionalInterface
+	public interface StarOutput {
+		void accept(int x, int y, int color, int faint);
 	}
 }

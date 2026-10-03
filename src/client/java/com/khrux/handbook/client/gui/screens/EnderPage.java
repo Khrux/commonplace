@@ -30,6 +30,10 @@ import net.minecraft.world.item.DyeColor;
 import org.jspecify.annotations.Nullable;
 
 public class EnderPage {
+	public static final int STARS_X = 13;
+	public static final int STARS_Y = 20;
+	public static final int STARS_WIDTH = 274;
+	public static final int STARS_HEIGHT = 164;
 	private static final int PUPIL_COLOR = 0xFFD8FFF4;
 	private static final int OPTION_HOLLOW_COLOR = 0xFFB2B0AA;
 	private static final int FOLLOWER_ROWS = 10;
@@ -254,7 +258,7 @@ public class EnderPage {
 
 	public void extractBackground(final GuiGraphicsExtractor graphics) {
 		graphics.blit(RenderPipelines.GUI_TEXTURED, PAGE_LOCATION, this.left, this.top, 0.0F, 0.0F, HandbookScreen.WIDTH, HandbookScreen.HEIGHT, HandbookScreen.WIDTH, HandbookScreen.HEIGHT);
-		EnderInk.stars(graphics, this.left + 13, this.top + 20, 274, 164, this.left + HandbookScreen.SEAM_X);
+		EnderInk.stars(graphics, this.left + STARS_X, this.top + STARS_Y, STARS_WIDTH, STARS_HEIGHT, this.left + HandbookScreen.SEAM_X);
 	}
 
 	public void extractRenderState(final GuiGraphicsExtractor graphics) {

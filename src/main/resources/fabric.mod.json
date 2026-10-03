@@ -18,6 +18,9 @@
 		],
 		"fabric-datagen": [
 			"com.khrux.handbook.datagen.HandbookDataGenerator"
+		],
+		"modmenu": [
+			"com.khrux.handbook.client.HandbookModMenu"
 		]
 	},
 	"depends": {
@@ -26,6 +29,9 @@
 		"java": ">=25",
 		"fabric-api": "*"
 	},
+	"suggests": {
+		"modmenu": "*"
+	},
 	"mixins": [
 		"handbook.mixins.json",
 		{
@@ -33,10 +39,8 @@
 			"environment": "client"
 		}
 	],
-	"suggests": {
-		"fieldguide": "*"
-	},
 	"contributors": [
-		"Hunternif, tyra314 and Sisby folk (Antique Atlas art, LGPL-3.0-or-later)"
+		"Hunternif, tyra314 and Sisby folk (Antique Atlas art, LGPL-3.0-or-later)",
+		"Evan Bowness and Kobber (Field Guide, MIT, bundled: https://github.com/evanbones/FieldGuide)"
 	]
 }

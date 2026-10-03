@@ -37,11 +37,26 @@ fabricApi {
 	}
 }
 
+repositories {
+	maven {
+		url = "https://maven.terraformersmc.com/releases/"
+		content {
+			includeGroup "com.terraformersmc"
+		}
+	}
+	flatDir {
+		dirs "libs"
+	}
+}
+
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 	compileOnly files("libs/fieldguide-1.20.0+26.3-fabric.jar")
+	compileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
+	localRuntime "com.terraformersmc:modmenu:${project.modmenu_version}"
+	include "local:fieldguide:1.20.0+26.3-fabric"
 	gametestCompileOnly files("libs/fieldguide-1.20.0+26.3-fabric.jar")
 	gametestRuntimeOnly files("libs/fieldguide-1.20.0+26.3-fabric.jar")
 }

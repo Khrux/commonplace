@@ -1,6 +1,7 @@
 package com.khrux.handbook.client.renderer;
 
 import com.khrux.handbook.Handbook;
+import com.khrux.handbook.HandbookConfig;
 import com.khrux.handbook.client.ClientHandbook;
 import com.khrux.handbook.client.ClientNotebook;
 import com.khrux.handbook.client.ClientSheen;
@@ -8,7 +9,9 @@ import com.khrux.handbook.client.atlas.AtlasTextures;
 import com.khrux.handbook.client.atlas.AtlasTileRenderer;
 import com.khrux.handbook.client.atlas.ClientAtlas;
 import com.khrux.handbook.client.gui.components.AtlasMap;
+import com.khrux.handbook.client.gui.components.EnderInk;
 import com.khrux.handbook.client.gui.components.NoteCanvas;
+import com.khrux.handbook.client.gui.screens.EnderPage;
 import com.khrux.handbook.client.gui.screens.HandbookScreen;
 import com.khrux.handbook.client.gui.screens.HandbookTab;
 import com.khrux.handbook.client.gui.screens.NotesPage;
@@ -17,6 +20,7 @@ import com.khrux.handbook.world.entity.player.NotePage;
 import com.khrux.handbook.world.item.HandbookItem;
 import com.khrux.handbook.world.level.atlas.AtlasMarker;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import java.util.ArrayList;
@@ -63,6 +67,8 @@ public class HeldHandbookRenderer {
 	private static final float TURNING_PAGE_BOTTOM = 174.0F;
 	private static final long TURN_MILLIS = 350L;
 	private static final int DIMMED_TILE_COLOR = 0x50FFFFFF;
+	private static final int SHIMMER_COLUMNS = 8;
+	private static final int SHIMMER_ROWS = 6;
 	private static long turnStart = -TURN_MILLIS;
 	private static int turnDirection;
 	private static HandbookTab previousTab = HandbookTab.RECIPES;
@@ -87,18 +93,17 @@ public class HeldHandbookRenderer {
 		poseStack.translate(0.0F, 0.0F, -0.005F);
 		renderBook(poseStack, submitNodeCollector.order(1), COVER, lightCoords, HandbookItem.getColor(Minecraft.getInstance().player));
 		poseStack.translate(0.0F, 0.0F, -0.02F);
-		OrderedSubmitNodeCollector pages = submitNodeCollector.order(2);
 		HandbookTab current = HandbookScreen.getLastTab();
 		long elapsed = Util.getMillis() - turnStart;
 		if (elapsed >= TURN_MILLIS || previousTab == current) {
-			renderSide(poseStack, pages, lightCoords, current, true);
-			renderSide(poseStack, pages, lightCoords, current, false);
+			renderSide(poseStack, submitNodeCollector, 2, lightCoords, current, true);
+			renderSide(poseStack, submitNodeCollector, 2, lightCoords, current, false);
 			return;
 		}
 
 		boolean forward = turnDirection > 0;
-		renderSide(poseStack, pages, lightCoords, forward ? previousTab : current, true);
-		renderSide(poseStack, pages, lightCoords, forward ? current : previousTab, false);
+		renderSide(poseStack, submitNodeCollector, 2, lightCoords, forward ? previousTab : current, true);
+		renderSide(poseStack, submitNodeCollector, 2, lightCoords, forward ? current : previousTab, false);
 		float progress = Mth.sin(elapsed / (float)TURN_MILLIS * Mth.HALF_PI);
 		float angle = (forward ? progress : 1.0F - progress) * Mth.PI;
 		boolean front = angle < Mth.HALF_PI;
@@ -112,9 +117,9 @@ public class HeldHandbookRenderer {
 
 		poseStack.translate(-SEAM, 0.0F, 0.0F);
 		int shade = (int)(255.0F - Mth.sin(angle) * 60.0F);
-		renderTurningPage(poseStack, submitNodeCollector.order(3), lightCoords, front, ARGB.color(255, shade, shade, shade));
+		renderTurningPage(poseStack, submitNodeCollector.order(5), lightCoords, front, ARGB.color(255, shade, shade, shade));
 		poseStack.translate(0.0F, 0.0F, front ? -0.02F : 0.02F);
-		renderSide(poseStack, submitNodeCollector.order(4), lightCoords, front ? (forward ? previousTab : current) : (forward ? current : previousTab), !front);
+		renderSide(poseStack, submitNodeCollector, 6, lightCoords, front ? (forward ? previousTab : current) : (forward ? current : previousTab), !front);
 		poseStack.popPose();
 	}
 
@@ -150,7 +155,10 @@ public class HeldHandbookRenderer {
 		});
 	}
 
-	private static void renderSide(final PoseStack poseStack, final OrderedSubmitNodeCollector submitNodeCollector, final int lightCoords, final HandbookTab tab, final boolean left) {
+	private static void renderSide(
+		final PoseStack poseStack, final SubmitNodeCollector collector, final int order, final int lightCoords, final HandbookTab tab, final boolean left
+	) {
+		OrderedSubmitNodeCollector submitNodeCollector = collector.order(order);
 		switch (tab) {
 			case ATLAS -> renderAtlas(poseStack, submitNodeCollector, lightCoords, left ? MAP_LEFT : SEAM, left ? SEAM : MAP_RIGHT);
 			case NOTES -> {
@@ -159,8 +167,17 @@ public class HeldHandbookRenderer {
 			}
 			case ENDER, RECIPES, FIELD_GUIDE -> {
 				Identifier snapshot = PageSnapshot.get(tab);
+				Identifier teal = PageSnapshot.getEnderTeal();
 				if (snapshot != null) {
 					renderSnapshot(poseStack, submitNodeCollector, lightCoords, snapshot, left);
+					if (tab == HandbookTab.ENDER && teal != null && HandbookConfig.get().enderPageMotion) {
+						poseStack.pushPose();
+						poseStack.translate(0.0F, 0.0F, -0.002F);
+						renderShimmer(poseStack, collector.order(order + 1), lightCoords, teal, left);
+						poseStack.translate(0.0F, 0.0F, -0.002F);
+						renderStars(poseStack, collector.order(order + 2), lightCoords, left);
+						poseStack.popPose();
+					}
 				} else if (left) {
 					renderHeading(poseStack, submitNodeCollector, lightCoords, tab.getName(), LEFT_PAGE_X);
 				}
@@ -184,6 +201,60 @@ public class HeldHandbookRenderer {
 			buffer.addVertex(pose, x1, y0, 0.0F).setColor(-1).setUv(u1, 1.0F).setLight(lightCoords);
 			buffer.addVertex(pose, x0, y0, 0.0F).setColor(-1).setUv(u0, 1.0F).setLight(lightCoords);
 		});
+	}
+
+	private static void renderShimmer(final PoseStack poseStack, final OrderedSubmitNodeCollector submitNodeCollector, final int lightCoords, final Identifier teal, final boolean left) {
+		float pageLeft = PageSnapshot.LEFT - HandbookScreen.COVER_LEFT;
+		float pageTop = PageSnapshot.TOP - HandbookScreen.COVER_TOP;
+		float x0 = left ? pageLeft : SEAM;
+		float x1 = left ? SEAM : pageLeft + PageSnapshot.WIDTH;
+		float y0 = pageTop;
+		float y1 = pageTop + PageSnapshot.HEIGHT;
+		submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.text(teal), (pose, buffer) -> {
+			for (int row = 0; row < SHIMMER_ROWS; row++) {
+				float top = Mth.lerp((float)row / SHIMMER_ROWS, y0, y1);
+				float bottom = Mth.lerp((float)(row + 1) / SHIMMER_ROWS, y0, y1);
+				for (int column = 0; column < SHIMMER_COLUMNS; column++) {
+					float columnLeft = Mth.lerp((float)column / SHIMMER_COLUMNS, x0, x1);
+					float columnRight = Mth.lerp((float)(column + 1) / SHIMMER_COLUMNS, x0, x1);
+					shimmerVertex(buffer, pose, columnLeft, bottom, lightCoords);
+					shimmerVertex(buffer, pose, columnRight, bottom, lightCoords);
+					shimmerVertex(buffer, pose, columnRight, top, lightCoords);
+					shimmerVertex(buffer, pose, columnLeft, top, lightCoords);
+				}
+			}
+		});
+	}
+
+	private static void shimmerVertex(final VertexConsumer buffer, final PoseStack.Pose pose, final float x, final float y, final int lightCoords) {
+		float u = (x - (PageSnapshot.LEFT - HandbookScreen.COVER_LEFT)) / PageSnapshot.WIDTH;
+		float v = (PageSnapshot.TOP - HandbookScreen.COVER_TOP + PageSnapshot.HEIGHT - y) / PageSnapshot.HEIGHT;
+		float teal = EnderInk.getTeal(x + HandbookScreen.COVER_LEFT, y + HandbookScreen.COVER_TOP);
+		buffer.addVertex(pose, x, y, 0.0F).setColor(ARGB.white(teal)).setUv(u, v).setLight(lightCoords);
+	}
+
+	private static void renderStars(final PoseStack poseStack, final OrderedSubmitNodeCollector submitNodeCollector, final int lightCoords, final boolean left) {
+		float starsLeft = EnderPage.STARS_X - HandbookScreen.COVER_LEFT;
+		float starsTop = EnderPage.STARS_Y - HandbookScreen.COVER_TOP;
+		submitNodeCollector.submitCustomGeometry(
+			poseStack,
+			INK,
+			(pose, buffer) -> EnderInk.forEachStar(EnderPage.STARS_WIDTH, EnderPage.STARS_HEIGHT, HandbookScreen.SEAM_X - EnderPage.STARS_X, (x, y, color, faint) -> {
+				float starX = starsLeft + x;
+				float starY = starsTop + y;
+				if (starX < SEAM != left) {
+					return;
+				}
+
+				quad(buffer, pose, starX, starY, starX + 1.0F, starY + 1.0F, color, lightCoords);
+				if (faint != 0) {
+					quad(buffer, pose, starX - 1.0F, starY, starX, starY + 1.0F, faint, lightCoords);
+					quad(buffer, pose, starX + 1.0F, starY, starX + 2.0F, starY + 1.0F, faint, lightCoords);
+					quad(buffer, pose, starX, starY - 1.0F, starX + 1.0F, starY, faint, lightCoords);
+					quad(buffer, pose, starX, starY + 1.0F, starX + 1.0F, starY + 2.0F, faint, lightCoords);
+				}
+			})
+		);
 	}
 
 	private static void renderAtlas(final PoseStack poseStack, final OrderedSubmitNodeCollector submitNodeCollector, final int lightCoords, final float minX, final float maxX) {
@@ -324,6 +395,15 @@ public class HeldHandbookRenderer {
 			buffer.addVertex(pose, x1, y0, 0.0F).setColor(color).setUv(1.0F, 0.0F).setLight(lightCoords);
 			buffer.addVertex(pose, x0, y0, 0.0F).setColor(color).setUv(0.0F, 0.0F).setLight(lightCoords);
 		});
+	}
+
+	private static void quad(
+		final VertexConsumer buffer, final PoseStack.Pose pose, final float x0, final float y0, final float x1, final float y1, final int color, final int lightCoords
+	) {
+		buffer.addVertex(pose, x0, y1, 0.0F).setColor(color).setUv(0.0F, 1.0F).setLight(lightCoords);
+		buffer.addVertex(pose, x1, y1, 0.0F).setColor(color).setUv(1.0F, 1.0F).setLight(lightCoords);
+		buffer.addVertex(pose, x1, y0, 0.0F).setColor(color).setUv(1.0F, 0.0F).setLight(lightCoords);
+		buffer.addVertex(pose, x0, y0, 0.0F).setColor(color).setUv(0.0F, 0.0F).setLight(lightCoords);
 	}
 
 	private static void renderNotePage(

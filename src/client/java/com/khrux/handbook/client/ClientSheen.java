@@ -1,5 +1,6 @@
 package com.khrux.handbook.client;
 
+import com.khrux.handbook.HandbookConfig;
 import com.khrux.handbook.client.gui.screens.EnderPage;
 import com.khrux.handbook.client.gui.screens.HandbookTab;
 import com.khrux.handbook.network.protocol.SheenPayload;
@@ -90,6 +91,10 @@ public class ClientSheen {
 	}
 
 	public int getChunkSheen(final String dimension, final long pos) {
+		if (this.isContentSheenHidden()) {
+			return NONE;
+		}
+
 		return this.sheen(layer -> {
 			LongSet chunks = layer.chunks.get(dimension);
 			return chunks != null && chunks.contains(pos);
@@ -97,6 +102,10 @@ public class ClientSheen {
 	}
 
 	public int getIconSheen(final String iconKey) {
+		if (this.isContentSheenHidden()) {
+			return NONE;
+		}
+
 		return this.sheen(layer -> {
 			for (int end = iconKey.lastIndexOf('_'); end > 0; end = iconKey.lastIndexOf('_', end - 1)) {
 				if (layer.entries.contains(iconKey.substring(0, end))) {
@@ -106,6 +115,10 @@ public class ClientSheen {
 
 			return false;
 		});
+	}
+
+	private boolean isContentSheenHidden() {
+		return HandbookConfig.get().contentSheen == HandbookConfig.ContentSheen.HIGHLIGHTED && this.getHighlighted() < 0;
 	}
 
 	private static String iconKey(final String entry) {

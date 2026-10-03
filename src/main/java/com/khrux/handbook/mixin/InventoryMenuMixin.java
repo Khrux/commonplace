@@ -35,7 +35,7 @@ public abstract class InventoryMenuMixin extends AbstractCraftingMenu {
 	}
 
 	@Inject(method = "quickMoveStack", at = @At("HEAD"), cancellable = true)
-	private void moveToolIntoSlot(final Player player, final int slotIndex, final CallbackInfoReturnable<ItemStack> cir) {
+	private void moveIntoHandbookSlots(final Player player, final int slotIndex, final CallbackInfoReturnable<ItemStack> cir) {
 		if (slotIndex < FIRST_INVENTORY_SLOT || slotIndex >= LAST_INVENTORY_SLOT || player.hasInfiniteMaterials()) {
 			return;
 		}
@@ -43,7 +43,9 @@ public abstract class InventoryMenuMixin extends AbstractCraftingMenu {
 		Slot slot = this.slots.get(slotIndex);
 		ItemStack itemStack = slot.getItem();
 		for (int i = 0; i < this.slots.size(); i++) {
-			if (this.slots.get(i) instanceof ToolSlot toolSlot && itemStack.is(toolSlot.getTool()) && !toolSlot.hasItem()) {
+			Slot target = this.slots.get(i);
+			boolean fits = target instanceof ToolSlot toolSlot ? itemStack.is(toolSlot.getTool()) : target instanceof HandbookSlot && itemStack.is(HandbookItems.HANDBOOK);
+			if (fits && !target.hasItem()) {
 				ItemStack clicked = itemStack.copy();
 				if (this.moveItemStackTo(itemStack, i, i + 1, false)) {
 					if (itemStack.isEmpty()) {

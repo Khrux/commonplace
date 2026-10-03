@@ -4,6 +4,7 @@ import com.evandev.fieldguide.client.ClientFieldGuideManager;
 import com.evandev.fieldguide.client.gui.screens.BookScreen;
 import com.evandev.fieldguide.client.gui.screens.FieldGuideCategoryScreen;
 import com.evandev.fieldguide.client.gui.widget.BookTextAreaWidget;
+import com.evandev.fieldguide.client.gui.widget.PageTurnButton;
 import com.evandev.fieldguide.config.ClientConfig;
 import com.khrux.handbook.client.ClientHandbook;
 import com.khrux.handbook.client.ClientSheen;
@@ -20,11 +21,16 @@ import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.ScrollWheelHandler;
+import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import org.jspecify.annotations.Nullable;
 
 public class FieldGuideTab {
+	private static final int PAGE_ARROW_Y = 166;
+	private static final int PAGE_BUTTON_BELOW = 150;
 	private static int sketchedVersion;
 	private static @Nullable BookTextAreaWidget typing;
 	private static int refreshCooldown;
@@ -91,12 +97,30 @@ public class FieldGuideTab {
 		typing = area;
 	}
 
+	private static List<FieldGuidePageArrow> replacePageButtons(final Screen screen, final int left, final int top) {
+		List<AbstractWidget> widgets = Screens.getWidgets(screen);
+		List<FieldGuidePageArrow> arrows = new ArrayList<>();
+		for (AbstractWidget widget : List.copyOf(widgets)) {
+			if (widget instanceof PageTurnButton page && page.getWidth() == 16 && page.getY() >= top + PAGE_BUTTON_BELOW) {
+				widgets.remove(page);
+				FieldGuidePageArrow arrow = new FieldGuidePageArrow(page, page.getX() > left + HandbookScreen.WIDTH / 2, top + PAGE_ARROW_Y);
+				arrow.sync();
+				widgets.add(arrow);
+				arrows.add(arrow);
+			}
+		}
+
+		return arrows;
+	}
+
 	private static void afterInit(final Minecraft minecraft, final Screen screen, final int width, final int height) {
 		if (screen instanceof BookScreen) {
 			int left = (width - HandbookScreen.WIDTH) / 2;
 			int top = (height - HandbookScreen.HEIGHT) / 2;
 			HandbookTabButton.addMainTabs(left + HandbookScreen.COVER_LEFT, top + HandbookScreen.COVER_TOP, HandbookTab.FIELD_GUIDE, Screens.getWidgets(screen)::add);
 			SheenRibbons.add(left, top, Screens.getWidgets(screen)::add);
+			List<FieldGuidePageArrow> arrows = replacePageButtons(screen, left, top);
+			ScreenEvents.beforeExtract(screen).register((current, graphics, mouseX, mouseY, a) -> arrows.forEach(FieldGuidePageArrow::sync));
 			ScreenEvents.remove(screen).register(current -> {
 				PageSnapshot.capture(HandbookTab.FIELD_GUIDE, left, top);
 				setTyping(minecraft, null);

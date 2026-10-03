@@ -56,8 +56,8 @@ public class RecipesPage {
 	private static final WidgetSprites FILTER_SPRITES = new WidgetSprites(
 		Handbook.id("filter_enabled"), Handbook.id("filter_disabled"), Handbook.id("filter_enabled_highlighted"), Handbook.id("filter_disabled_highlighted")
 	);
-	private static final WidgetSprites PAGE_FORWARD_SPRITES = new WidgetSprites(Handbook.id("page_forward"), Handbook.id("page_forward_highlighted"));
-	private static final WidgetSprites PAGE_BACKWARD_SPRITES = new WidgetSprites(Handbook.id("page_backward"), Handbook.id("page_backward_highlighted"));
+	public static final WidgetSprites PAGE_FORWARD_SPRITES = new WidgetSprites(Handbook.id("page_forward"), Handbook.id("page_forward_highlighted"));
+	public static final WidgetSprites PAGE_BACKWARD_SPRITES = new WidgetSprites(Handbook.id("page_backward"), Handbook.id("page_backward_highlighted"));
 	private static final List<RecipesPage.Category> CATEGORIES = List.of(
 		RecipesPage.Category.of("all", Items.COMPASS, List.of()),
 		RecipesPage.Category.of("equipment", Items.IRON_AXE, List.of(RecipeBookCategories.CRAFTING_EQUIPMENT)),

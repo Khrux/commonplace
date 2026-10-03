@@ -101,14 +101,16 @@ public class AtlasMap extends AbstractWidget {
 		graphics.enableScissor(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height);
 		String dimension = Minecraft.getInstance().level.dimension().identifier().toString();
 		AtlasMap.RasterKey key = new AtlasMap.RasterKey(
-			dimension, minChunkX, minChunkZ, maxChunkX, maxChunkZ, originX - this.getX(), originY - this.getY(), subtile, ClientHandbook.get().atlas().getVersion(), ClientHandbook.get().sheen().getVersion(), ClientHandbook.get().sheen().getHighlighted()
+			dimension, minChunkX, minChunkZ, maxChunkX, maxChunkZ, originX - this.getX(), originY - this.getY(), subtile, ClientHandbook.get().atlas().getVersion(), ClientHandbook.get().sheen().getVersion(), ClientHandbook.get().sheen().getHighlighted(), Minecraft.getInstance().getWindow().getGuiScale()
 		);
 		if (!key.equals(rasterKey) || raster == null) {
 			this.rasterize(key);
 			rasterKey = key;
 		}
 
-		graphics.blit(RenderPipelines.GUI_TEXTURED, RASTER_LOCATION, this.getX(), this.getY(), 0.0F, 0.0F, this.width, this.height, this.width, this.height);
+		graphics.blit(
+			RenderPipelines.GUI_TEXTURED, RASTER_LOCATION, this.getX(), this.getY(), 0.0F, 0.0F, this.width, this.height, this.width * key.guiScale(), this.height * key.guiScale(), this.width * key.guiScale(), this.height * key.guiScale()
+		);
 		this.extractStructureMarkers(graphics, leftBlock, topBlock, scale);
 		AtlasMarker hovered = this.extractMarkers(graphics, leftBlock, topBlock, scale, mouseX, mouseY);
 		this.extractPlayer(graphics, leftBlock, topBlock, scale);
@@ -123,17 +125,20 @@ public class AtlasMap extends AbstractWidget {
 	}
 
 	private void rasterize(final AtlasMap.RasterKey key) {
-		if (raster == null || raster.getPixels().getWidth() != this.width || raster.getPixels().getHeight() != this.height) {
+		int scale = key.guiScale();
+		int imageWidth = this.width * scale;
+		int imageHeight = this.height * scale;
+		if (raster == null || raster.getPixels().getWidth() != imageWidth || raster.getPixels().getHeight() != imageHeight) {
 			if (raster != null) {
 				Minecraft.getInstance().getTextureManager().release(RASTER_LOCATION);
 			}
 
-			raster = new DynamicTexture(RASTER_LOCATION::toString, this.width, this.height, true);
+			raster = new DynamicTexture(RASTER_LOCATION::toString, imageWidth, imageHeight, true);
 			Minecraft.getInstance().getTextureManager().register(RASTER_LOCATION, raster);
 		}
 
 		NativeImage image = raster.getPixels();
-		image.fillRect(0, 0, this.width, this.height, 0);
+		image.fillRect(0, 0, imageWidth, imageHeight, 0);
 		Long2IntMap sheens = new Long2IntOpenHashMap();
 		for (int chunkZ = key.minChunkZ() - 1; chunkZ <= key.maxChunkZ() + 1; chunkZ++) {
 			for (int chunkX = key.minChunkX() - 1; chunkX <= key.maxChunkX() + 1; chunkX++) {
@@ -146,7 +151,7 @@ public class AtlasMap extends AbstractWidget {
 			(texture, chunkX, chunkZ, x, y, size, u0, u1, v0, v1) -> {
 				int localX = x - (key.originX() + (chunkX - key.minChunkX()) * size * 2) == 0 ? 0 : SUBTILE_TEXELS;
 				int localZ = y - (key.originY() + (chunkZ - key.minChunkZ()) * size * 2) == 0 ? 0 : SUBTILE_TEXELS;
-				this.rasterizeSubtile(image, texture, sheens, chunkX, chunkZ, localX, localZ, x, y, size, u0, v0);
+				this.rasterizeSubtile(image, texture, sheens, chunkX, chunkZ, localX, localZ, x * scale, y * scale, size * scale, u0, v0);
 			},
 			key.minChunkX(),
 			key.minChunkZ(),
@@ -188,9 +193,9 @@ public class AtlasMap extends AbstractWidget {
 			sheens.get(ChunkPos.pack(chunkX, chunkZ + 1))
 		};
 		boolean border = neighbours[0] != sheen || neighbours[1] != sheen || neighbours[2] != sheen || neighbours[3] != sheen;
-		for (int py = Math.max(0, y); py < Math.min(this.height, y + size); py++) {
+		for (int py = Math.max(0, y); py < Math.min(image.getHeight(), y + size); py++) {
 			int texelZ = (py - y) * SUBTILE_TEXELS / size;
-			for (int px = Math.max(0, x); px < Math.min(this.width, x + size); px++) {
+			for (int px = Math.max(0, x); px < Math.min(image.getWidth(), x + size); px++) {
 				int texelX = (px - x) * SUBTILE_TEXELS / size;
 				int color = mask.original()[regionX + texelX + (regionZ + texelZ) * mask.width()];
 				if (ARGB.alpha(color) == 0) {
@@ -486,7 +491,7 @@ public class AtlasMap extends AbstractWidget {
 	}
 
 	private record RasterKey(
-		String dimension, int minChunkX, int minChunkZ, int maxChunkX, int maxChunkZ, int originX, int originY, int subtile, int atlasVersion, int sheenVersion, int highlighted
+		String dimension, int minChunkX, int minChunkZ, int maxChunkX, int maxChunkZ, int originX, int originY, int subtile, int atlasVersion, int sheenVersion, int highlighted, int guiScale
 	) {
 	}
 }

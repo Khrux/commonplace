@@ -402,9 +402,14 @@ public class SyndicationGameTests {
 		player.getInventory().setItem(20, new ItemStack(Items.SPYGLASS));
 		player.getInventory().setItem(21, new ItemStack(HandbookItems.ENDER_QUILL));
 		player.getInventory().setItem(22, new ItemStack(Items.SPYGLASS));
+		player.setAttached(HandbookAttachmentTypes.HANDBOOK_SLOT, ItemStack.EMPTY);
+		player.getInventory().setItem(23, new ItemStack(HandbookItems.HANDBOOK));
 		player.inventoryMenu.quickMoveStack(player, 20);
 		player.inventoryMenu.quickMoveStack(player, 21);
 		player.inventoryMenu.quickMoveStack(player, 22);
+		player.inventoryMenu.quickMoveStack(player, 23);
+		helper.assertTrue(player.getAttachedOrElse(HandbookAttachmentTypes.HANDBOOK_SLOT, ItemStack.EMPTY).is(HandbookItems.HANDBOOK), "the Handbook should go into its slot");
+		helper.assertTrue(player.getInventory().getItem(23).isEmpty(), "the Handbook should leave the inventory");
 		helper.assertTrue(player.getAttachedOrElse(HandbookAttachmentTypes.SPYGLASS_SLOT, ItemStack.EMPTY).is(Items.SPYGLASS), "the spyglass should go into its slot");
 		helper.assertTrue(player.getAttachedOrElse(HandbookAttachmentTypes.QUILL_SLOT, ItemStack.EMPTY).is(HandbookItems.ENDER_QUILL), "the quill should go into its slot");
 		helper.assertTrue(player.getInventory().getItem(20).isEmpty() && player.getInventory().getItem(21).isEmpty(), "the moved items should leave the inventory");

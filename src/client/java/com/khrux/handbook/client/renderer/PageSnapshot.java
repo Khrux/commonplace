@@ -1,6 +1,8 @@
 package com.khrux.handbook.client.renderer;
 
 import com.khrux.handbook.Handbook;
+import com.khrux.handbook.HandbookConfig;
+import com.khrux.handbook.client.gui.components.EnderInk;
 import com.khrux.handbook.client.gui.screens.HandbookTab;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -20,8 +22,11 @@ public class PageSnapshot extends DynamicTexture {
 	public static final int HEIGHT = 168;
 	private static final Map<HandbookTab, Identifier> SNAPSHOTS = new EnumMap<>(HandbookTab.class);
 	private static final double AWAY = -10000.0;
+	private static final Identifier ENDER_TEAL = Handbook.id("page_snapshot/ender_teal");
 	private static PageSnapshot.@Nullable Leaving leaving;
+	private static @Nullable HandbookTab captured;
 	private static boolean cleanFrame;
+	private static boolean enderTeal;
 
 	private PageSnapshot(final Identifier id, final int width, final int height) {
 		super(id::toString, width, height, true);
@@ -38,8 +43,13 @@ public class PageSnapshot extends DynamicTexture {
 		}
 
 		Minecraft minecraft = Minecraft.getInstance();
-		leaving = new PageSnapshot.Leaving(tab, bookLeft, bookTop, action);
+		boolean shimmer = tab == HandbookTab.ENDER && HandbookConfig.get().enderPageMotion;
+		leaving = new PageSnapshot.Leaving(tab, bookLeft, bookTop, action, shimmer);
 		cleanFrame = false;
+		if (shimmer) {
+			EnderInk.forceTeal(0.0F);
+		}
+
 		minecraft.mouseHandler.onMove(minecraft.getWindow().handle(), AWAY, AWAY, 0.0, 0.0);
 	}
 
@@ -55,10 +65,36 @@ public class PageSnapshot extends DynamicTexture {
 			return;
 		}
 
+		if (current.shimmer()) {
+			Identifier id = Handbook.id("page_snapshot/" + current.tab().getSerializedName());
+			if (copy(id, current.bookLeft(), current.bookTop())) {
+				SNAPSHOTS.put(current.tab(), id);
+				enderTeal = false;
+				leaving = new PageSnapshot.Leaving(current.tab(), current.bookLeft(), current.bookTop(), current.action(), false);
+				cleanFrame = false;
+				EnderInk.forceTeal(1.0F);
+				return;
+			}
+
+			EnderInk.release();
+		}
+
 		leaving = null;
-		capture(current.tab(), current.bookLeft(), current.bookTop());
+		if (EnderInk.isForced()) {
+			enderTeal = copy(ENDER_TEAL, current.bookLeft(), current.bookTop());
+			EnderInk.release();
+		} else {
+			capture(current.tab(), current.bookLeft(), current.bookTop());
+		}
+
+		captured = current.tab();
 		current.action().run();
+		captured = null;
 		minecraft.mouseHandler.resyncMousePosition();
+	}
+
+	public static @Nullable Identifier getEnderTeal() {
+		return enderTeal ? ENDER_TEAL : null;
 	}
 
 	public static @Nullable Identifier get(final HandbookTab tab) {
@@ -66,6 +102,28 @@ public class PageSnapshot extends DynamicTexture {
 	}
 
 	public static void capture(final HandbookTab tab, final int bookLeft, final int bookTop) {
+		if (tab == captured) {
+			return;
+		}
+
+		if (leaving != null && leaving.tab() == tab) {
+			leaving = null;
+			EnderInk.release();
+			Minecraft.getInstance().mouseHandler.resyncMousePosition();
+		}
+
+		Identifier id = Handbook.id("page_snapshot/" + tab.getSerializedName());
+		if (!copy(id, bookLeft, bookTop)) {
+			return;
+		}
+
+		SNAPSHOTS.put(tab, id);
+		if (tab == HandbookTab.ENDER) {
+			enderTeal = false;
+		}
+	}
+
+	private static boolean copy(final Identifier id, final int bookLeft, final int bookTop) {
 		Minecraft minecraft = Minecraft.getInstance();
 		RenderTarget target = minecraft.gameRenderer.mainRenderTarget();
 		int scale = minecraft.getWindow().getGuiScale();
@@ -74,16 +132,15 @@ public class PageSnapshot extends DynamicTexture {
 		int width = WIDTH * scale;
 		int height = HEIGHT * scale;
 		if (x < 0 || y < 0 || x + width > target.width || y + height > target.height) {
-			return;
+			return false;
 		}
 
-		Identifier id = Handbook.id("page_snapshot/" + tab.getSerializedName());
 		PageSnapshot snapshot = new PageSnapshot(id, width, height);
 		RenderSystem.getDevice().createCommandEncoder().copyTextureToTexture(target.getColorTexture(), snapshot.getTexture(), 0, 0, 0, x, y, width, height);
 		minecraft.getTextureManager().register(id, snapshot);
-		SNAPSHOTS.put(tab, id);
+		return true;
 	}
 
-	private record Leaving(HandbookTab tab, int bookLeft, int bookTop, Runnable action) {
+	private record Leaving(HandbookTab tab, int bookLeft, int bookTop, Runnable action, boolean shimmer) {
 	}
 }

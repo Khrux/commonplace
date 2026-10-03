@@ -2,6 +2,7 @@ package com.khrux.handbook.client.gui.components;
 
 import com.khrux.handbook.Handbook;
 import com.khrux.handbook.client.ClientHandbook;
+import com.khrux.handbook.HandbookConfig;
 import com.khrux.handbook.client.ClientSheen;
 import com.khrux.handbook.client.gui.screens.RecipesPage;
 import com.khrux.handbook.client.renderer.InkMasks;
@@ -31,6 +32,7 @@ public class RecipeGrid extends AbstractWidget {
 	private static final Identifier SLOT_SELECTED_SPRITE = Handbook.id("recipe_slot_selected");
 	private static final int BOX = 23;
 	private static final int WASH_ALPHA = 22;
+	private static final int SQUARE_ALPHA = 220;
 	private static final float INK_DEPTH = 0.2F;
 	private static final float INK_BELOW = 0.65F;
 	private static final int DIMMED_COLOR = 0xB0F4EAD2;
@@ -106,6 +108,11 @@ public class RecipeGrid extends AbstractWidget {
 	private static void extractSheen(final GuiGraphicsExtractor graphics, final Identifier sprite, final int x, final int y, final int sheen) {
 		if (sheen == ClientSheen.DIMMED) {
 			graphics.fill(x + 1, y + 1, x + 1 + BOX, y + 1 + BOX, DIMMED_COLOR);
+			return;
+		}
+
+		if (sheen != ClientSheen.NONE && HandbookConfig.get().recipeSheen == HandbookConfig.RecipeSheen.SQUARE) {
+			graphics.outline(x + 2, y + 2, BOX - 2, BOX - 2, ARGB.color(SQUARE_ALPHA, sheen));
 			return;
 		}
 
