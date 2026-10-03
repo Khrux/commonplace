@@ -23,10 +23,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 public class SyndicationGameTests {
 	private static final int SETTLE = 45;
@@ -438,6 +439,8 @@ public class SyndicationGameTests {
 		player.setAttached(HandbookAttachmentTypes.SPYGLASS_SLOT, new ItemStack(Items.SPYGLASS));
 		player.setAttached(HandbookAttachmentTypes.HANDBOOK_SLOT, new ItemStack(HandbookItems.HANDBOOK));
 		player.setAttached(HandbookAttachmentTypes.NOTEBOOK, List.of(NotePage.EMPTY.withText("kept")));
+		Vec3 inside = helper.absoluteVec(new Vec3(1.5, 1.0, 1.5));
+		player.setPos(inside.x, inside.y, inside.z);
 		player.die(player.damageSources().genericKill());
 		ServerPlayer respawned = helper.getLevel().getServer().getPlayerList().respawn(player, false, net.minecraft.world.entity.Entity.RemovalReason.KILLED);
 		helper.assertTrue(respawned.getAttachedOrElse(HandbookAttachmentTypes.QUILL_SLOT, ItemStack.EMPTY).isEmpty(), "the quill should drop on death");
@@ -446,7 +449,7 @@ public class SyndicationGameTests {
 		helper.assertTrue(slot(respawned, 2).hash().equals(hash), "passphrases survive death");
 		helper.assertTrue(respawned.getAttachedOrElse(HandbookAttachmentTypes.NOTEBOOK, List.of()).getFirst().text().equals("kept"), "the personal notebook survives death");
 		helper.assertTrue(
-			!helper.getLevel().getEntities(EntityTypeTest.forClass(ItemEntity.class), entity -> entity.getItem().is(HandbookItems.ENDER_QUILL)).isEmpty(),
+			!helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(inside, inside).inflate(4.0), entity -> entity.getItem().is(HandbookItems.ENDER_QUILL)).isEmpty(),
 			"the quill should be on the ground"
 		);
 		remove(helper, respawned);
