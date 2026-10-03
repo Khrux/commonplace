@@ -1,6 +1,7 @@
 package com.khrux.handbook.client.gui.components;
 
 import com.khrux.handbook.Handbook;
+import com.khrux.handbook.client.ClientHandbook;
 import com.khrux.handbook.client.ClientSheen;
 import com.khrux.handbook.client.gui.screens.RecipesPage;
 import com.khrux.handbook.client.renderer.InkMasks;
@@ -89,7 +90,7 @@ public class RecipeGrid extends AbstractWidget {
 	private static int getSheen(final List<RecipeDisplayEntry> entries) {
 		int result = ClientSheen.NONE;
 		for (RecipeDisplayEntry entry : entries) {
-			int sheen = ClientSheen.getRecipeSheen(entry.id().index());
+			int sheen = ClientHandbook.get().sheen().getRecipeSheen(entry.id().index());
 			if (sheen != ClientSheen.NONE && sheen != ClientSheen.DIMMED) {
 				return sheen;
 			}

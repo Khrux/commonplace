@@ -26,9 +26,9 @@ public class ClientPassphrases {
 	private static final Codec<Map<String, String>> KNOWN_CODEC = Codec.unboundedMap(Codec.STRING, Codec.STRING);
 	private static final Path KNOWN_PATH = FabricLoader.getInstance().getConfigDir().resolve("handbook").resolve("passphrases.json");
 	private static final Map<String, String> KNOWN = new HashMap<>();
-	private static List<PassphraseSlotsPayload.SlotView> slots = createEmpty();
 	private static boolean loaded;
-	private static int version;
+	private List<PassphraseSlotsPayload.SlotView> slots = createEmpty();
+	private int version;
 
 	private static List<PassphraseSlotsPayload.SlotView> createEmpty() {
 		List<PassphraseSlotsPayload.SlotView> empty = new ArrayList<>();
@@ -39,28 +39,25 @@ public class ClientPassphrases {
 		return List.copyOf(empty);
 	}
 
-	public static void receive(final PassphraseSlotsPayload payload) {
-		if (payload.slots().size() == PassphraseSlot.SLOTS) {
-			boolean changed = !slots.stream().map(PassphraseSlotsPayload.SlotView::slot).toList().equals(payload.slots().stream().map(PassphraseSlotsPayload.SlotView::slot).toList());
-			slots = payload.slots();
-			if (changed) {
-				version++;
-				ClientSheen.changed();
-			}
+	public void receive(final PassphraseSlotsPayload payload) {
+		if (payload.slots().size() != PassphraseSlot.SLOTS) {
+			return;
+		}
+
+		boolean changed = !this.slots.stream().map(PassphraseSlotsPayload.SlotView::slot).toList().equals(payload.slots().stream().map(PassphraseSlotsPayload.SlotView::slot).toList());
+		this.slots = payload.slots();
+		if (changed) {
+			this.version++;
+			ClientHandbook.get().sheen().changed();
 		}
 	}
 
-	public static void reset() {
-		slots = createEmpty();
-		version++;
+	public int getVersion() {
+		return this.version;
 	}
 
-	public static int getVersion() {
-		return version;
-	}
-
-	public static PassphraseSlotsPayload.SlotView get(final int index) {
-		return slots.get(index);
+	public PassphraseSlotsPayload.SlotView get(final int index) {
+		return this.slots.get(index);
 	}
 
 	public static String hash(final String passphrase) {

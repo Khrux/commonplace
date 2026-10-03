@@ -1,5 +1,6 @@
 package com.khrux.handbook.mixin;
 
+import com.khrux.handbook.client.ClientHandbook;
 import com.khrux.handbook.client.ClientSheen;
 import com.khrux.handbook.client.compat.FieldGuideSketch;
 import net.minecraft.client.renderer.texture.AbstractTexture;
@@ -17,7 +18,7 @@ public class TextureManagerMixin {
 	private void sketchFieldGuideIcons(final Identifier location, final AbstractTexture texture, final CallbackInfo ci) {
 		if (texture instanceof DynamicTexture dynamic && FieldGuideSketch.isIcon(location.getNamespace(), location.getPath())) {
 			String path = location.getPath();
-			FieldGuideSketch.sketch(dynamic.getPixels(), ClientSheen.getIconSheen(path.substring(path.indexOf('/') + 1)));
+			FieldGuideSketch.sketch(dynamic.getPixels(), ClientHandbook.get().sheen().getIconSheen(path.substring(path.indexOf('/') + 1)));
 			dynamic.upload();
 		}
 	}

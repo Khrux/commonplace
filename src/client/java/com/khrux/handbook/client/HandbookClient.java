@@ -16,7 +16,6 @@ import com.khrux.handbook.network.protocol.PassphraseSlotsPayload;
 import com.khrux.handbook.network.protocol.SheenPayload;
 import com.khrux.handbook.world.item.HandbookItems;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
@@ -33,20 +32,15 @@ import net.minecraft.world.level.Level;
 public class HandbookClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
-		ClientPlayNetworking.registerGlobalReceiver(NotebookPayload.TYPE, (payload, context) -> ClientNotebook.set(payload));
-		ClientPlayNetworking.registerGlobalReceiver(NoteEditPayload.TYPE, (payload, context) -> ClientNotebook.receive(payload));
-		ClientPlayNetworking.registerGlobalReceiver(NoteOptionsPayload.TYPE, (payload, context) -> ClientNotebook.setOptions(payload.options()));
-		ClientNotebook.bootstrap();
+		ClientPlayNetworking.registerGlobalReceiver(NotebookPayload.TYPE, (payload, context) -> ClientHandbook.get().notebook().set(payload));
+		ClientPlayNetworking.registerGlobalReceiver(NoteEditPayload.TYPE, (payload, context) -> ClientHandbook.get().notebook().receive(payload));
+		ClientPlayNetworking.registerGlobalReceiver(NoteOptionsPayload.TYPE, (payload, context) -> ClientHandbook.get().notebook().setOptions(payload.options()));
+		ClientHandbook.bootstrap();
 		PageSnapshot.bootstrap();
-		ClientPlayNetworking.registerGlobalReceiver(AtlasTilesPayload.TYPE, (payload, context) -> ClientAtlas.receive(payload));
-		ClientPlayNetworking.registerGlobalReceiver(AtlasMarkersPayload.TYPE, (payload, context) -> ClientAtlas.receiveMarkers(payload.markers()));
-		ClientPlayNetworking.registerGlobalReceiver(PassphraseSlotsPayload.TYPE, (payload, context) -> ClientPassphrases.receive(payload));
-		ClientPlayNetworking.registerGlobalReceiver(SheenPayload.TYPE, (payload, context) -> ClientSheen.receive(payload));
-		ClientPlayConnectionEvents.DISCONNECT.register((listener, minecraft) -> {
-			ClientPassphrases.reset();
-			ClientNotebook.reset();
-			ClientSheen.reset();
-		});
+		ClientPlayNetworking.registerGlobalReceiver(AtlasTilesPayload.TYPE, (payload, context) -> ClientHandbook.get().atlas().receive(payload));
+		ClientPlayNetworking.registerGlobalReceiver(AtlasMarkersPayload.TYPE, (payload, context) -> ClientHandbook.get().atlas().receiveMarkers(payload.markers()));
+		ClientPlayNetworking.registerGlobalReceiver(PassphraseSlotsPayload.TYPE, (payload, context) -> ClientHandbook.get().passphrases().receive(payload));
+		ClientPlayNetworking.registerGlobalReceiver(SheenPayload.TYPE, (payload, context) -> ClientHandbook.get().sheen().receive(payload));
 		UseItemCallback.EVENT.register(HandbookClient::useHandbook);
 		ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloadListener(Handbook.id("ink_masks"), (ResourceManagerReloadListener)resourceManager -> InkMasks.clear());
 		HandbookKeyMappings.bootstrap();

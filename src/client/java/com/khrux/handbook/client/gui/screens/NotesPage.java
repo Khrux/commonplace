@@ -2,6 +2,7 @@ package com.khrux.handbook.client.gui.screens;
 
 import com.khrux.handbook.Handbook;
 import com.khrux.handbook.HandbookConfig;
+import com.khrux.handbook.client.ClientHandbook;
 import com.khrux.handbook.client.ClientNotebook;
 import com.khrux.handbook.client.ClientPassphrases;
 import com.khrux.handbook.client.gui.components.HandbookTabButton;
@@ -52,7 +53,7 @@ public class NotesPage {
 	}
 
 	public static int getSpread() {
-		return Math.min(spread, ClientNotebook.getPageCount(getBook()) / 2 - 1);
+		return Math.min(spread, ClientHandbook.get().notebook().getPageCount(getBook()) / 2 - 1);
 	}
 
 	public static NotesPage.Tool getTool() {
@@ -64,7 +65,7 @@ public class NotesPage {
 	}
 
 	public static int getInk() {
-		return getBook() != NoteEditPayload.PERSONAL && ClientNotebook.getOptions().colors() == HandbookConfig.NoteColors.BLACK ? BLACK_INK : color;
+		return getBook() != NoteEditPayload.PERSONAL && ClientHandbook.get().notebook().getOptions().colors() == HandbookConfig.NoteColors.BLACK ? BLACK_INK : color;
 	}
 
 	public static void setColor(final int newColor) {
@@ -75,11 +76,11 @@ public class NotesPage {
 	}
 
 	private static boolean isTextOnly() {
-		return getBook() != NoteEditPayload.PERSONAL && ClientNotebook.getOptions().colors() == HandbookConfig.NoteColors.TEXT;
+		return getBook() != NoteEditPayload.PERSONAL && ClientHandbook.get().notebook().getOptions().colors() == HandbookConfig.NoteColors.TEXT;
 	}
 
 	private static boolean isAvailable(final int candidate) {
-		return candidate == NoteEditPayload.PERSONAL || HandbookTab.ENDER.isAvailable() && !ClientPassphrases.get(candidate).slot().isEmpty();
+		return candidate == NoteEditPayload.PERSONAL || HandbookTab.ENDER.isAvailable() && !ClientHandbook.get().passphrases().get(candidate).slot().isEmpty();
 	}
 
 	public void init(final Consumer<AbstractWidget> widgets) {
@@ -95,7 +96,7 @@ public class NotesPage {
 			}
 
 			int index = i;
-			PassphraseSlot slot = ClientPassphrases.get(i).slot();
+			PassphraseSlot slot = ClientHandbook.get().passphrases().get(i).slot();
 			tabY += 25;
 			widgets.accept(HandbookTabButton.passphrase(
 				this.left + HandbookScreen.COVER_LEFT, tabY, current == i, false, PASSPHRASE_ICON, EnderPage.getSlotColor(slot), EnderPage.getPullOut(slot), () -> this.selectBook(index)
@@ -115,7 +116,7 @@ public class NotesPage {
 			}
 		}
 
-		boolean blackOnly = current != NoteEditPayload.PERSONAL && ClientNotebook.getOptions().colors() == HandbookConfig.NoteColors.BLACK;
+		boolean blackOnly = current != NoteEditPayload.PERSONAL && ClientHandbook.get().notebook().getOptions().colors() == HandbookConfig.NoteColors.BLACK;
 		if (!isTextOnly() && !blackOnly) {
 			widgets.accept(new InkPalette(this.left + 16, this.top + 169, this.screen));
 		}
@@ -135,12 +136,12 @@ public class NotesPage {
 		backButton.visible = shownSpread > 0;
 		widgets.accept(backButton);
 		PageButton forwardButton = new PageButton(this.left + 262, this.top + 168, true, button -> this.turn(1), true);
-		forwardButton.visible = shownSpread < ClientNotebook.getPageCount(current) / 2 - 1;
+		forwardButton.visible = shownSpread < ClientHandbook.get().notebook().getPageCount(current) / 2 - 1;
 		widgets.accept(forwardButton);
 	}
 
 	private void selectBook(final int selected) {
-		ClientNotebook.flush();
+		ClientHandbook.get().notebook().flush();
 		book = selected;
 		this.screen.rebuild();
 	}
@@ -157,10 +158,10 @@ public class NotesPage {
 			.build(this.font, NotePage.CANVAS_WIDTH * CANVAS_SCALE, NotePage.CANVAS_HEIGHT * CANVAS_SCALE, Component.translatable("handbook.tab.notes"));
 		box.setCharacterLimit(NotePage.MAX_TEXT_LENGTH);
 		box.setLineLimit(NotePage.CANVAS_HEIGHT * CANVAS_SCALE / this.font.lineHeight - 1);
-		box.setValue(ClientNotebook.get(bookIndex, page).text());
+		box.setValue(ClientHandbook.get().notebook().get(bookIndex, page).text());
 		box.setValueListener(value -> {
 			if (!this.syncingText) {
-				ClientNotebook.setText(bookIndex, page, value);
+				ClientHandbook.get().notebook().setText(bookIndex, page, value);
 			}
 		});
 		this.textBoxes.add(new NotesPage.TextBox(box, bookIndex, page));
@@ -175,7 +176,7 @@ public class NotesPage {
 		}
 
 		for (NotesPage.TextBox textBox : this.textBoxes) {
-			String stored = ClientNotebook.get(textBox.book(), textBox.page()).text();
+			String stored = ClientHandbook.get().notebook().get(textBox.book(), textBox.page()).text();
 			if (!textBox.box().isFocused() && !textBox.box().getValue().equals(stored)) {
 				this.syncingText = true;
 				textBox.box().setValue(stored);
@@ -185,8 +186,8 @@ public class NotesPage {
 	}
 
 	private void turn(final int direction) {
-		ClientNotebook.flush();
-		spread = Mth.clamp(getSpread() + direction, 0, ClientNotebook.getPageCount(getBook()) / 2 - 1);
+		ClientHandbook.get().notebook().flush();
+		spread = Mth.clamp(getSpread() + direction, 0, ClientHandbook.get().notebook().getPageCount(getBook()) / 2 - 1);
 		this.screen.rebuild();
 	}
 

@@ -1,6 +1,7 @@
 package com.khrux.handbook.client.gui.screens;
 
 import com.khrux.handbook.Handbook;
+import com.khrux.handbook.client.ClientHandbook;
 import com.khrux.handbook.client.ClientNotebook;
 import com.khrux.handbook.client.ClientPassphrases;
 import com.khrux.handbook.client.HandbookKeyMappings;
@@ -91,7 +92,7 @@ public class HandbookScreen extends Screen {
 
 	@Override
 	protected void init() {
-		this.passphraseVersion = ClientPassphrases.getVersion();
+		this.passphraseVersion = ClientHandbook.get().passphrases().getVersion();
 		this.recipes = null;
 		this.notes = null;
 		this.ender = null;
@@ -237,7 +238,7 @@ public class HandbookScreen extends Screen {
 
 	@Override
 	public void tick() {
-		if (this.passphraseVersion != ClientPassphrases.getVersion()) {
+		if (this.passphraseVersion != ClientHandbook.get().passphrases().getVersion()) {
 			this.rebuild();
 			return;
 		}
@@ -257,7 +258,7 @@ public class HandbookScreen extends Screen {
 			PageSnapshot.capture(this.tab, this.left, this.top);
 		}
 
-		ClientNotebook.flush();
+		ClientHandbook.get().notebook().flush();
 	}
 
 	@Override

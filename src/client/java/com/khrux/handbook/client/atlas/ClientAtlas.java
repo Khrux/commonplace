@@ -14,63 +14,63 @@ import net.minecraft.world.level.ChunkPos;
 import org.jspecify.annotations.Nullable;
 
 public class ClientAtlas {
-	private static final Long2IntMap TILES = new Long2IntOpenHashMap();
-	private static final List<String> PALETTE = new ArrayList<>();
-	private static final Long2ObjectMap<String> STRUCTURES = new Long2ObjectOpenHashMap<>();
-	private static List<AtlasMarker> markers = List.of();
-	private static int version;
+	private final Long2IntMap tiles = new Long2IntOpenHashMap();
+	private final List<String> palette = new ArrayList<>();
+	private final Long2ObjectMap<String> structures = new Long2ObjectOpenHashMap<>();
+	private List<AtlasMarker> markers = List.of();
+	private int version;
 
-	static {
-		TILES.defaultReturnValue(WorldAtlas.NO_TILE);
+	public ClientAtlas() {
+		this.tiles.defaultReturnValue(WorldAtlas.NO_TILE);
 	}
 
-	public static void receive(final AtlasTilesPayload payload) {
+	public void receive(final AtlasTilesPayload payload) {
 		if (payload.reset()) {
-			TILES.clear();
-			STRUCTURES.clear();
+			this.tiles.clear();
+			this.structures.clear();
 		}
 
 		for (int i = 0; i < payload.structurePositions().length; i++) {
-			STRUCTURES.put(payload.structurePositions()[i], payload.structureMarkers().get(i));
+			this.structures.put(payload.structurePositions()[i], payload.structureMarkers().get(i));
 		}
 
-		PALETTE.clear();
-		PALETTE.addAll(payload.palette());
+		this.palette.clear();
+		this.palette.addAll(payload.palette());
 		for (int i = 0; i < payload.positions().length; i++) {
-			TILES.put(payload.positions()[i], payload.tiles()[i]);
+			this.tiles.put(payload.positions()[i], payload.tiles()[i]);
 		}
 
-		version++;
+		this.version++;
 	}
 
-	public static int getVersion() {
-		return version;
+	public int getVersion() {
+		return this.version;
 	}
 
-	public static void receiveMarkers(final List<AtlasMarker> received) {
-		markers = received;
+	public void receiveMarkers(final List<AtlasMarker> received) {
+		this.markers = received;
 	}
 
-	public static Long2ObjectMap<String> getStructures() {
-		return STRUCTURES;
+	public Long2ObjectMap<String> getStructures() {
+		return this.structures;
 	}
 
-	public static List<AtlasMarker> getMarkers() {
-		return markers;
+	public List<AtlasMarker> getMarkers() {
+		return this.markers;
 	}
 
-	public static @Nullable AtlasTileTexture getTexture(final int chunkX, final int chunkZ) {
-		int tile = TILES.get(ChunkPos.pack(chunkX, chunkZ));
+	public @Nullable AtlasTileTexture getTexture(final int chunkX, final int chunkZ) {
+		int tile = this.tiles.get(ChunkPos.pack(chunkX, chunkZ));
 		if (tile == WorldAtlas.NO_TILE) {
 			return null;
 		}
 
 		int provider = WorldAtlas.getProvider(tile);
-		if (provider >= PALETTE.size()) {
+		if (provider >= this.palette.size()) {
 			return null;
 		}
 
 		return AtlasTextures.get(Minecraft.getInstance().getResourceManager())
-			.getTexture(PALETTE.get(provider), WorldAtlas.getElevation(tile), chunkX, chunkZ);
+			.getTexture(this.palette.get(provider), WorldAtlas.getElevation(tile), chunkX, chunkZ);
 	}
 }

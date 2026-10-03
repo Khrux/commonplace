@@ -1,6 +1,7 @@
 package com.khrux.handbook.client.renderer;
 
 import com.khrux.handbook.Handbook;
+import com.khrux.handbook.client.ClientHandbook;
 import com.khrux.handbook.client.ClientNotebook;
 import com.khrux.handbook.client.ClientSheen;
 import com.khrux.handbook.client.atlas.AtlasTextures;
@@ -154,7 +155,7 @@ public class HeldHandbookRenderer {
 			case ATLAS -> renderAtlas(poseStack, submitNodeCollector, lightCoords, left ? MAP_LEFT : SEAM, left ? SEAM : MAP_RIGHT);
 			case NOTES -> {
 				int page = NotesPage.getSpread() * 2 + (left ? 0 : 1);
-				renderNotePage(poseStack, submitNodeCollector, lightCoords, ClientNotebook.get(NotesPage.getBook(), page), left ? LEFT_PAGE_X : RIGHT_PAGE_X);
+				renderNotePage(poseStack, submitNodeCollector, lightCoords, ClientHandbook.get().notebook().get(NotesPage.getBook(), page), left ? LEFT_PAGE_X : RIGHT_PAGE_X);
 			}
 			case ENDER, RECIPES, FIELD_GUIDE -> {
 				Identifier snapshot = PageSnapshot.get(tab);
@@ -196,6 +197,33 @@ public class HeldHandbookRenderer {
 		int maxChunkZ = Mth.floor((topBlock + (MAP_BOTTOM - MAP_TOP) * blocksPerUnit) / 16.0) + 1;
 		int originX = MAP_LEFT + (int)Math.round((minChunkX * 16 - leftBlock) / blocksPerUnit);
 		int originY = MAP_TOP + (int)Math.round((minChunkZ * 16 - topBlock) / blocksPerUnit);
+		renderAtlasTiles(poseStack, submitNodeCollector, lightCoords, minX, maxX, player, minChunkX, minChunkZ, maxChunkX, maxChunkZ, originX, originY);
+		renderStructureMarkers(poseStack, submitNodeCollector, lightCoords, minX, maxX, leftBlock, topBlock, blocksPerUnit);
+		renderMarkers(poseStack, submitNodeCollector, lightCoords, minX, maxX, leftBlock, topBlock, blocksPerUnit);
+		float playerX = (MAP_LEFT + MAP_RIGHT) / 2.0F;
+		if (playerX >= minX && playerX < maxX) {
+			poseStack.pushPose();
+			poseStack.translate(playerX, (MAP_TOP + MAP_BOTTOM) / 2.0F, -0.01F);
+			poseStack.rotateDegrees(Axis.ZP, player.getYRot() + 180.0F);
+			quad(poseStack, submitNodeCollector, ATLAS_PLAYER, -3.5F, -4.0F, 3.5F, 4.0F, lightCoords, -1);
+			poseStack.popPose();
+		}
+	}
+
+	private static void renderAtlasTiles(
+		final PoseStack poseStack,
+		final OrderedSubmitNodeCollector submitNodeCollector,
+		final int lightCoords,
+		final float minX,
+		final float maxX,
+		final Player player,
+		final int minChunkX,
+		final int minChunkZ,
+		final int maxChunkX,
+		final int maxChunkZ,
+		final int originX,
+		final int originY
+	) {
 		String dimension = player.level().dimension().identifier().toString();
 		Map<Identifier, List<HeldHandbookRenderer.Quad>> subtiles = new HashMap<>();
 		AtlasTileRenderer.render((texture, chunkX, chunkZ, x, y, size, u0, u1, v0, v1) -> {
@@ -204,7 +232,7 @@ public class HeldHandbookRenderer {
 			if (x1 > x0 && x >= MAP_LEFT && y >= MAP_TOP && x + size <= MAP_RIGHT && y + size <= MAP_BOTTOM) {
 				float clippedU0 = u0 + (u1 - u0) * (x0 - x) / size;
 				float clippedU1 = u0 + (u1 - u0) * (x1 - x) / size;
-				int sheen = ClientSheen.getChunkSheen(dimension, ChunkPos.pack(chunkX, chunkZ));
+				int sheen = ClientHandbook.get().sheen().getChunkSheen(dimension, ChunkPos.pack(chunkX, chunkZ));
 				InkMasks.Mask mask = sheen == ClientSheen.NONE || sheen == ClientSheen.DIMMED ? null : InkMasks.get(texture, AtlasMap.INK_BELOW);
 				Identifier drawn = mask == null ? texture : mask.location();
 				int color = mask != null ? AtlasMap.getInkColor(sheen) : sheen == ClientSheen.DIMMED ? DIMMED_TILE_COLOR : -1;
@@ -219,8 +247,20 @@ public class HeldHandbookRenderer {
 				buffer.addVertex(pose, quad.x0(), quad.y0(), 0.0F).setColor(quad.color()).setUv(quad.u0(), quad.v0()).setLight(lightCoords);
 			}
 		}));
+	}
+
+	private static void renderStructureMarkers(
+		final PoseStack poseStack,
+		final OrderedSubmitNodeCollector submitNodeCollector,
+		final int lightCoords,
+		final float minX,
+		final float maxX,
+		final double leftBlock,
+		final double topBlock,
+		final double blocksPerUnit
+	) {
 		AtlasTextures textures = AtlasTextures.get(Minecraft.getInstance().getResourceManager());
-		for (Long2ObjectMap.Entry<String> entry : ClientAtlas.getStructures().long2ObjectEntrySet()) {
+		for (Long2ObjectMap.Entry<String> entry : ClientHandbook.get().atlas().getStructures().long2ObjectEntrySet()) {
 			AtlasTextures.StructureMarker marker = textures.getStructureMarker(entry.getValue());
 			if (marker == null) {
 				continue;
@@ -248,8 +288,19 @@ public class HeldHandbookRenderer {
 			});
 			poseStack.popPose();
 		}
+	}
 
-		for (AtlasMarker marker : ClientAtlas.getMarkers()) {
+	private static void renderMarkers(
+		final PoseStack poseStack,
+		final OrderedSubmitNodeCollector submitNodeCollector,
+		final int lightCoords,
+		final float minX,
+		final float maxX,
+		final double leftBlock,
+		final double topBlock,
+		final double blocksPerUnit
+	) {
+		for (AtlasMarker marker : ClientHandbook.get().atlas().getMarkers()) {
 			float x = (float)(MAP_LEFT + (marker.x() + 0.5 - leftBlock) / blocksPerUnit) - marker.type().getAnchorX() / 2.0F;
 			float y = (float)(MAP_TOP + (marker.z() + 0.5 - topBlock) / blocksPerUnit) - marker.type().getAnchorY() / 2.0F;
 			float center = x + HELD_MARKER_SIZE / 2.0F;
@@ -260,15 +311,6 @@ public class HeldHandbookRenderer {
 				quad(poseStack, submitNodeCollector, RenderTypes.text(marker.type().getAccentTexture()), x, y, x + HELD_MARKER_SIZE, y + HELD_MARKER_SIZE, lightCoords, marker.type().getAccentColor());
 				poseStack.popPose();
 			}
-		}
-
-		float playerX = (MAP_LEFT + MAP_RIGHT) / 2.0F;
-		if (playerX >= minX && playerX < maxX) {
-			poseStack.pushPose();
-			poseStack.translate(playerX, (MAP_TOP + MAP_BOTTOM) / 2.0F, -0.01F);
-			poseStack.rotateDegrees(Axis.ZP, player.getYRot() + 180.0F);
-			quad(poseStack, submitNodeCollector, ATLAS_PLAYER, -3.5F, -4.0F, 3.5F, 4.0F, lightCoords, -1);
-			poseStack.popPose();
 		}
 	}
 

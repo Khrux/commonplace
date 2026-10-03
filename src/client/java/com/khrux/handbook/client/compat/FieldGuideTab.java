@@ -5,6 +5,7 @@ import com.evandev.fieldguide.client.gui.screens.BookScreen;
 import com.evandev.fieldguide.client.gui.screens.FieldGuideCategoryScreen;
 import com.evandev.fieldguide.client.gui.widget.BookTextAreaWidget;
 import com.evandev.fieldguide.config.ClientConfig;
+import com.khrux.handbook.client.ClientHandbook;
 import com.khrux.handbook.client.ClientSheen;
 import com.khrux.handbook.client.gui.components.HandbookTabButton;
 import com.khrux.handbook.client.gui.components.SheenRibbons;
@@ -34,8 +35,8 @@ public class FieldGuideTab {
 		ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
 			if (refreshCooldown > 0) {
 				refreshCooldown--;
-			} else if (sketchedVersion != ClientSheen.getEntryVersion()) {
-				sketchedVersion = ClientSheen.getEntryVersion();
+			} else if (sketchedVersion != ClientHandbook.get().sheen().getEntryVersion()) {
+				sketchedVersion = ClientHandbook.get().sheen().getEntryVersion();
 				refreshCooldown = 20;
 				FieldGuideSketch.refresh();
 			}

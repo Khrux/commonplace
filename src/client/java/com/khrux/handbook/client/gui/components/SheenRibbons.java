@@ -1,5 +1,6 @@
 package com.khrux.handbook.client.gui.components;
 
+import com.khrux.handbook.client.ClientHandbook;
 import com.khrux.handbook.client.ClientPassphrases;
 import com.khrux.handbook.client.ClientSheen;
 import com.khrux.handbook.client.gui.screens.EnderPage;
@@ -35,13 +36,13 @@ public class SheenRibbons extends AbstractWidget {
 	protected void extractWidgetRenderState(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float a) {
 		int hovered = this.slotAt(mouseX, mouseY);
 		for (int i = 0; i < PassphraseSlot.SLOTS; i++) {
-			PassphraseSlot slot = ClientPassphrases.get(i).slot();
+			PassphraseSlot slot = ClientHandbook.get().passphrases().get(i).slot();
 			if (slot.isEmpty()) {
 				continue;
 			}
 
 			int x = this.getX() + i * RIBBON_SPACING;
-			int length = ClientSheen.getHighlighted() == i ? SELECTED_LENGTH : RIBBON_LENGTH;
+			int length = ClientHandbook.get().sheen().getHighlighted() == i ? SELECTED_LENGTH : RIBBON_LENGTH;
 			int color = ARGB.opaque(EnderPage.getSlotColor(slot));
 			int bottom = this.getY() + length;
 			graphics.fill(x, this.getY(), x + RIBBON_WIDTH, bottom - 2, color);
@@ -60,14 +61,14 @@ public class SheenRibbons extends AbstractWidget {
 		}
 
 		int index = (int)(mouseX - this.getX()) / RIBBON_SPACING;
-		return index < PassphraseSlot.SLOTS && !ClientPassphrases.get(index).slot().isEmpty() ? index : -1;
+		return index < PassphraseSlot.SLOTS && !ClientHandbook.get().passphrases().get(index).slot().isEmpty() ? index : -1;
 	}
 
 	@Override
 	public void onClick(final MouseButtonEvent event, final boolean doubleClick) {
 		int index = this.slotAt(event.x(), event.y());
 		if (index >= 0) {
-			ClientSheen.toggleHighlight(index);
+			ClientHandbook.get().sheen().toggleHighlight(index);
 		}
 	}
 

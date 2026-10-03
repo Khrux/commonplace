@@ -44,6 +44,14 @@ public class InkMasks {
 			return Optional.empty();
 		}
 
+		int[] original = toMask(image, inkBelow);
+		InkMasks.Shapes shapes = findShapes(image);
+		Identifier location = texture.withPath(path -> path.replace(".png", "_ink"));
+		minecraft.getTextureManager().register(location, new DynamicTexture(location::toString, image));
+		return Optional.of(new InkMasks.Mask(location, image.getWidth(), image.getHeight(), original, shapes.ids(), shapes.centerX(), shapes.centerY()));
+	}
+
+	private static int[] toMask(final NativeImage image, final float inkBelow) {
 		int width = image.getWidth();
 		int height = image.getHeight();
 		int[] original = new int[width * height];
@@ -56,6 +64,12 @@ public class InkMasks {
 			}
 		}
 
+		return original;
+	}
+
+	private static InkMasks.Shapes findShapes(final NativeImage image) {
+		int width = image.getWidth();
+		int height = image.getHeight();
 		int[] shapes = new int[width * height];
 		Arrays.fill(shapes, -1);
 		IntList centerX = new IntArrayList();
@@ -99,14 +113,15 @@ public class InkMasks {
 			centerY.add(sumY / queue.size());
 		}
 
-		Identifier location = texture.withPath(path -> path.replace(".png", "_ink"));
-		minecraft.getTextureManager().register(location, new DynamicTexture(location::toString, image));
-		return Optional.of(new InkMasks.Mask(location, width, height, original, shapes, centerX.toIntArray(), centerY.toIntArray()));
+		return new InkMasks.Shapes(shapes, centerX.toIntArray(), centerY.toIntArray());
 	}
 
 	public record Mask(Identifier location, int width, int height, int[] original, int[] shapes, int[] centerX, int[] centerY) {
 		public int getShape(final int x, final int y) {
 			return x < 0 || y < 0 || x >= this.width || y >= this.height ? -1 : this.shapes[x + y * this.width];
 		}
+	}
+
+	private record Shapes(int[] ids, int[] centerX, int[] centerY) {
 	}
 }

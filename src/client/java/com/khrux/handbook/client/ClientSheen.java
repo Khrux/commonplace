@@ -20,46 +20,34 @@ public class ClientSheen {
 	public static final int NONE = 0;
 	public static final int DIMMED = 1;
 	public static final int LEFT_COLOR = 0xFF8E8A84;
-	private static final ClientSheen.Layer[] LAYERS = new ClientSheen.Layer[SheenPayload.LEFT_LAYER + 1];
-	private static int highlighted = -1;
-	private static int entryVersion;
-	private static int version;
+	private final ClientSheen.Layer[] layers = new ClientSheen.Layer[SheenPayload.LEFT_LAYER + 1];
+	private int highlighted = -1;
+	private int entryVersion;
+	private int version;
 
-	static {
-		reset();
+	public ClientSheen() {
+		this.clearLayers();
 	}
 
-	public static void reset() {
-		for (int i = 0; i < LAYERS.length; i++) {
-			LAYERS[i] = new ClientSheen.Layer();
+	private void clearLayers() {
+		for (int i = 0; i < this.layers.length; i++) {
+			this.layers[i] = new ClientSheen.Layer();
 		}
-
-		highlighted = -1;
-		entryVersion++;
-		version++;
 	}
 
-	public static void receive(final SheenPayload payload) {
+	public void receive(final SheenPayload payload) {
 		if (payload.reset()) {
-			for (int i = 0; i < LAYERS.length; i++) {
-				LAYERS[i] = new ClientSheen.Layer();
-			}
+			this.clearLayers();
 		}
 
-		if (payload.layer() < 0 || payload.layer() >= LAYERS.length) {
+		if (payload.layer() < 0 || payload.layer() >= this.layers.length) {
 			return;
 		}
 
-		ClientSheen.Layer layer = LAYERS[payload.layer()];
+		ClientSheen.Layer layer = this.layers[payload.layer()];
 		layer.recipes.addAll(payload.recipes());
 		for (String entry : payload.entries()) {
 			layer.entries.add(iconKey(entry));
-		}
-
-		version++;
-		if (payload.reset() || !payload.entries().isEmpty()) {
-			entryVersion++;
-		version++;
 		}
 
 		if (payload.chunks().length > 0) {
@@ -68,44 +56,48 @@ public class ClientSheen {
 				chunks.add(pos);
 			}
 		}
+
+		this.version++;
+		if (payload.reset() || !payload.entries().isEmpty()) {
+			this.entryVersion++;
+		}
 	}
 
-	public static int getVersion() {
-		return version;
+	public int getVersion() {
+		return this.version;
 	}
 
-	public static int getEntryVersion() {
-		return entryVersion;
+	public int getEntryVersion() {
+		return this.entryVersion;
 	}
 
-	public static void changed() {
-		entryVersion++;
-		version++;
+	public void changed() {
+		this.entryVersion++;
+		this.version++;
 	}
 
-	public static int getHighlighted() {
-		return HandbookTab.ENDER.isAvailable() ? highlighted : -1;
+	public int getHighlighted() {
+		return HandbookTab.ENDER.isAvailable() ? this.highlighted : -1;
 	}
 
-	public static void toggleHighlight(final int slot) {
-		highlighted = highlighted == slot ? -1 : slot;
-		entryVersion++;
-		version++;
+	public void toggleHighlight(final int slot) {
+		this.highlighted = this.highlighted == slot ? -1 : slot;
+		this.changed();
 	}
 
-	public static int getRecipeSheen(final int display) {
-		return sheen(layer -> layer.recipes.contains(display));
+	public int getRecipeSheen(final int display) {
+		return this.sheen(layer -> layer.recipes.contains(display));
 	}
 
-	public static int getChunkSheen(final String dimension, final long pos) {
-		return sheen(layer -> {
+	public int getChunkSheen(final String dimension, final long pos) {
+		return this.sheen(layer -> {
 			LongSet chunks = layer.chunks.get(dimension);
 			return chunks != null && chunks.contains(pos);
 		});
 	}
 
-	public static int getIconSheen(final String iconKey) {
-		return sheen(layer -> {
+	public int getIconSheen(final String iconKey) {
+		return this.sheen(layer -> {
 			for (int end = iconKey.lastIndexOf('_'); end > 0; end = iconKey.lastIndexOf('_', end - 1)) {
 				if (layer.entries.contains(iconKey.substring(0, end))) {
 					return true;
@@ -122,21 +114,22 @@ public class ClientSheen {
 		return base.replace(":", "_").replace("/", "_").toLowerCase(Locale.ROOT);
 	}
 
-	private static int sheen(final Predicate<ClientSheen.Layer> contains) {
-		int highlight = getHighlighted();
+	private int sheen(final Predicate<ClientSheen.Layer> contains) {
+		ClientPassphrases passphrases = ClientHandbook.get().passphrases();
+		int highlight = this.getHighlighted();
 		if (highlight >= 0) {
-			PassphraseSlot slot = ClientPassphrases.get(highlight).slot();
-			return !slot.isEmpty() && contains.test(LAYERS[highlight]) ? ARGB.opaque(EnderPage.getSlotColor(slot)) : DIMMED;
+			PassphraseSlot slot = passphrases.get(highlight).slot();
+			return !slot.isEmpty() && contains.test(this.layers[highlight]) ? ARGB.opaque(EnderPage.getSlotColor(slot)) : DIMMED;
 		}
 
 		for (int i = 0; i < PassphraseSlot.SLOTS; i++) {
-			PassphraseSlot slot = ClientPassphrases.get(i).slot();
-			if (!slot.isEmpty() && contains.test(LAYERS[i])) {
+			PassphraseSlot slot = passphrases.get(i).slot();
+			if (!slot.isEmpty() && contains.test(this.layers[i])) {
 				return ARGB.opaque(EnderPage.getSlotColor(slot));
 			}
 		}
 
-		return contains.test(LAYERS[SheenPayload.LEFT_LAYER]) ? LEFT_COLOR : NONE;
+		return contains.test(this.layers[SheenPayload.LEFT_LAYER]) ? LEFT_COLOR : NONE;
 	}
 
 	private static class Layer {

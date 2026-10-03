@@ -42,7 +42,11 @@ public class PassphraseNotebooks {
 		}
 
 		NotePage updated = notes.get(page).withPixels(allowed);
-		notes.set(page, allowedText.map(updated::withText).orElse(updated));
+		if (allowedText.isPresent()) {
+			updated = updated.withText(allowedText.get());
+		}
+
+		notes.set(page, updated);
 		MinecraftServer server = player.level().getServer();
 		for (UUID uuid : syndicate.getFollowers().keySet()) {
 			ServerPlayer follower = server.getPlayerList().getPlayer(uuid);

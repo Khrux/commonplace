@@ -1,5 +1,6 @@
 package com.khrux.handbook.client.atlas;
 
+import com.khrux.handbook.client.ClientHandbook;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.Nullable;
 
@@ -22,27 +23,27 @@ public class AtlasTileRenderer {
 	}
 
 	private static void renderCorner(final AtlasTileRenderer.Output output, final int x, final int z, final int screenX, final int screenY, final int subtile) {
-		AtlasTileTexture topLeft = ClientAtlas.getTexture(x - 1, z - 1);
-		AtlasTileTexture topRight = ClientAtlas.getTexture(x, z - 1);
-		AtlasTileTexture bottomLeft = ClientAtlas.getTexture(x - 1, z);
-		AtlasTileTexture bottomRight = ClientAtlas.getTexture(x, z);
+		AtlasTileTexture topLeft = ClientHandbook.get().atlas().getTexture(x - 1, z - 1);
+		AtlasTileTexture topRight = ClientHandbook.get().atlas().getTexture(x, z - 1);
+		AtlasTileTexture bottomLeft = ClientHandbook.get().atlas().getTexture(x - 1, z);
+		AtlasTileTexture bottomRight = ClientHandbook.get().atlas().getTexture(x, z);
 		if (topLeft != null) {
-			int shape = shape(topLeft, topRight, bottomLeft, bottomRight, ClientAtlas.getTexture(x - 1, z - 2), ClientAtlas.getTexture(x - 2, z - 1));
+			int shape = shape(topLeft, topRight, bottomLeft, bottomRight, ClientHandbook.get().atlas().getTexture(x - 1, z - 2), ClientHandbook.get().atlas().getTexture(x - 2, z - 1));
 			draw(output, topLeft, x - 1, z - 1, shape, 1, 1, screenX - subtile, screenY - subtile, subtile);
 		}
 
 		if (topRight != null) {
-			int shape = shape(topRight, topLeft, bottomRight, bottomLeft, ClientAtlas.getTexture(x, z - 2), ClientAtlas.getTexture(x + 1, z - 1));
+			int shape = shape(topRight, topLeft, bottomRight, bottomLeft, ClientHandbook.get().atlas().getTexture(x, z - 2), ClientHandbook.get().atlas().getTexture(x + 1, z - 1));
 			draw(output, topRight, x, z - 1, shape, 0, 1, screenX, screenY - subtile, subtile);
 		}
 
 		if (bottomLeft != null) {
-			int shape = shape(bottomLeft, bottomRight, topLeft, topRight, ClientAtlas.getTexture(x - 1, z + 1), ClientAtlas.getTexture(x - 2, z));
+			int shape = shape(bottomLeft, bottomRight, topLeft, topRight, ClientHandbook.get().atlas().getTexture(x - 1, z + 1), ClientHandbook.get().atlas().getTexture(x - 2, z));
 			draw(output, bottomLeft, x - 1, z, shape, 1, 0, screenX - subtile, screenY, subtile);
 		}
 
 		if (bottomRight != null) {
-			int shape = shape(bottomRight, bottomLeft, topRight, topLeft, ClientAtlas.getTexture(x, z + 1), ClientAtlas.getTexture(x + 1, z));
+			int shape = shape(bottomRight, bottomLeft, topRight, topLeft, ClientHandbook.get().atlas().getTexture(x, z + 1), ClientHandbook.get().atlas().getTexture(x + 1, z));
 			draw(output, bottomRight, x, z, shape, 0, 0, screenX, screenY, subtile);
 		}
 	}

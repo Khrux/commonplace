@@ -1,6 +1,7 @@
 package com.khrux.handbook.client.gui.screens;
 
 import com.khrux.handbook.Handbook;
+import com.khrux.handbook.client.ClientHandbook;
 import com.khrux.handbook.client.ClientPassphrases;
 import com.khrux.handbook.client.gui.components.DyeSwatches;
 import com.khrux.handbook.client.gui.components.EnderInk;
@@ -81,7 +82,7 @@ public class EnderPage {
 
 	public void init(final Consumer<AbstractWidget> widgets) {
 		for (int i = 0; i < PassphraseSlot.SLOTS; i++) {
-			PassphraseSlot slot = ClientPassphrases.get(i).slot();
+			PassphraseSlot slot = ClientHandbook.get().passphrases().get(i).slot();
 			int index = i;
 			widgets.accept(HandbookTabButton.passphrase(
 				this.left + HandbookScreen.COVER_LEFT, this.top + TABS_TOP + i * TAB_SPACING, i == selected, true, PASSPHRASE_ICON, getSlotColor(slot), getPullOut(slot), () -> {
@@ -133,7 +134,7 @@ public class EnderPage {
 	}
 
 	private PassphraseSlot getSlot() {
-		return ClientPassphrases.get(selected).slot();
+		return ClientHandbook.get().passphrases().get(selected).slot();
 	}
 
 	private String getDraft() {
@@ -167,7 +168,7 @@ public class EnderPage {
 	}
 
 	public void tick() {
-		PassphraseSlotsPayload.SlotView view = ClientPassphrases.get(selected);
+		PassphraseSlotsPayload.SlotView view = ClientHandbook.get().passphrases().get(selected);
 		PassphraseSlot slot = view.slot();
 		String value = this.passphraseBox == null ? "" : this.passphraseBox.getValue();
 		this.followButton.visible = !value.isEmpty() && !ClientPassphrases.hash(value).equals(slot.hash());
@@ -247,7 +248,7 @@ public class EnderPage {
 			EnderInk.ring(graphics, tabLeft + 14, tabTop + 12, 11.0F, EnderInk.color(tabLeft, tabTop));
 		}
 
-		int color = ARGB.color(200, getSlotColor(ClientPassphrases.get(pressedSlot).slot()));
+		int color = ARGB.color(200, getSlotColor(ClientHandbook.get().passphrases().get(pressedSlot).slot()));
 		graphics.blit(RenderPipelines.GUI_TEXTURED, PASSPHRASE_ICON, (int)dragX - 8, (int)dragY - 8, 0.0F, 0.0F, 16, 16, 16, 16, color);
 	}
 
@@ -262,7 +263,7 @@ public class EnderPage {
 	}
 
 	private void extractPage(final GuiGraphicsExtractor graphics) {
-		PassphraseSlotsPayload.SlotView view = ClientPassphrases.get(selected);
+		PassphraseSlotsPayload.SlotView view = ClientHandbook.get().passphrases().get(selected);
 		PassphraseSlot slot = view.slot();
 		EnderInk.centeredText(graphics, this.font, Component.translatable("handbook.ender.slot", selected + 1), this.left + 80, this.top + 30);
 		if (this.passphraseBox != null && this.passphraseBox.getValue().isEmpty() && !this.passphraseBox.isFocused()) {

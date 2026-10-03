@@ -42,7 +42,11 @@ public class NotebookSync {
 		}
 
 		NotePage updated = pages.get(payload.page()).withPixels(payload.pixels());
-		pages.set(payload.page(), payload.text().map(updated::withText).orElse(updated));
+		if (payload.text().isPresent()) {
+			updated = updated.withText(payload.text().get());
+		}
+
+		pages.set(payload.page(), updated);
 		player.setAttached(HandbookAttachmentTypes.NOTEBOOK, List.copyOf(pages));
 	}
 

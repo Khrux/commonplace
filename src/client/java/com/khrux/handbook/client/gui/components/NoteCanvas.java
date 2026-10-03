@@ -1,5 +1,6 @@
 package com.khrux.handbook.client.gui.components;
 
+import com.khrux.handbook.client.ClientHandbook;
 import com.khrux.handbook.client.ClientNotebook;
 import com.khrux.handbook.client.gui.screens.NotesPage;
 import com.khrux.handbook.client.gui.screens.RecipesPage;
@@ -34,7 +35,7 @@ public class NoteCanvas extends AbstractWidget {
 
 	@Override
 	protected void extractWidgetRenderState(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float a) {
-		NotePage notePage = ClientNotebook.get(this.book, this.page);
+		NotePage notePage = ClientHandbook.get().notebook().get(this.book, this.page);
 		for (int y = 0; y < NotePage.CANVAS_HEIGHT; y++) {
 			int start = 0;
 			while (start < NotePage.CANVAS_WIDTH) {
@@ -107,8 +108,8 @@ public class NoteCanvas extends AbstractWidget {
 			for (int dx = -radius; dx <= radius; dx++) {
 				int px = x + dx;
 				int py = y + dy;
-				if (px >= 0 && px < NotePage.CANVAS_WIDTH && py >= 0 && py < NotePage.CANVAS_HEIGHT && ClientNotebook.get(this.book, this.page).getPixel(px, py) != color) {
-					ClientNotebook.paint(this.book, this.page, px, py, color);
+				if (px >= 0 && px < NotePage.CANVAS_WIDTH && py >= 0 && py < NotePage.CANVAS_HEIGHT && ClientHandbook.get().notebook().get(this.book, this.page).getPixel(px, py) != color) {
+					ClientHandbook.get().notebook().paint(this.book, this.page, px, py, color);
 				}
 			}
 		}

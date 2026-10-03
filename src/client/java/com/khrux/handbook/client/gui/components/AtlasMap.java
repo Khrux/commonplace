@@ -1,6 +1,7 @@
 package com.khrux.handbook.client.gui.components;
 
 import com.khrux.handbook.Handbook;
+import com.khrux.handbook.client.ClientHandbook;
 import com.khrux.handbook.client.ClientSheen;
 import com.khrux.handbook.client.atlas.AtlasTextures;
 import com.khrux.handbook.client.atlas.AtlasTileRenderer;
@@ -100,7 +101,7 @@ public class AtlasMap extends AbstractWidget {
 		graphics.enableScissor(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height);
 		String dimension = Minecraft.getInstance().level.dimension().identifier().toString();
 		AtlasMap.RasterKey key = new AtlasMap.RasterKey(
-			dimension, minChunkX, minChunkZ, maxChunkX, maxChunkZ, originX - this.getX(), originY - this.getY(), subtile, ClientAtlas.getVersion(), ClientSheen.getVersion(), ClientSheen.getHighlighted()
+			dimension, minChunkX, minChunkZ, maxChunkX, maxChunkZ, originX - this.getX(), originY - this.getY(), subtile, ClientHandbook.get().atlas().getVersion(), ClientHandbook.get().sheen().getVersion(), ClientHandbook.get().sheen().getHighlighted()
 		);
 		if (!key.equals(rasterKey) || raster == null) {
 			this.rasterize(key);
@@ -137,7 +138,7 @@ public class AtlasMap extends AbstractWidget {
 		for (int chunkZ = key.minChunkZ() - 1; chunkZ <= key.maxChunkZ() + 1; chunkZ++) {
 			for (int chunkX = key.minChunkX() - 1; chunkX <= key.maxChunkX() + 1; chunkX++) {
 				long pos = ChunkPos.pack(chunkX, chunkZ);
-				sheens.put(pos, ClientAtlas.getTexture(chunkX, chunkZ) == null ? ClientSheen.NONE : ClientSheen.getChunkSheen(key.dimension(), pos));
+				sheens.put(pos, ClientHandbook.get().atlas().getTexture(chunkX, chunkZ) == null ? ClientSheen.NONE : ClientHandbook.get().sheen().getChunkSheen(key.dimension(), pos));
 			}
 		}
 
@@ -266,7 +267,7 @@ public class AtlasMap extends AbstractWidget {
 
 	private void extractStructureMarkers(final GuiGraphicsExtractor graphics, final double leftBlock, final double topBlock, final double scale) {
 		AtlasTextures textures = AtlasTextures.get(Minecraft.getInstance().getResourceManager());
-		for (Long2ObjectMap.Entry<String> entry : ClientAtlas.getStructures().long2ObjectEntrySet()) {
+		for (Long2ObjectMap.Entry<String> entry : ClientHandbook.get().atlas().getStructures().long2ObjectEntrySet()) {
 			AtlasTextures.StructureMarker marker = textures.getStructureMarker(entry.getValue());
 			if (marker == null || marker.nearClip() && subtile >= NEAR_CLIP_SUBTILE) {
 				continue;
@@ -283,7 +284,7 @@ public class AtlasMap extends AbstractWidget {
 		final GuiGraphicsExtractor graphics, final double leftBlock, final double topBlock, final double scale, final int mouseX, final int mouseY
 	) {
 		AtlasMarker hovered = null;
-		for (AtlasMarker marker : ClientAtlas.getMarkers()) {
+		for (AtlasMarker marker : ClientHandbook.get().atlas().getMarkers()) {
 			int x = (int)Math.round(this.getX() + (marker.x() + 0.5 - leftBlock) / scale) - marker.type().getAnchorX();
 			int y = (int)Math.round(this.getY() + (marker.z() + 0.5 - topBlock) / scale) - marker.type().getAnchorY();
 			graphics.blit(RenderPipelines.GUI_TEXTURED, marker.type().getTexture(), x, y, 0.0F, 0.0F, MARKER_TEXTURE_SIZE, MARKER_TEXTURE_SIZE, MARKER_TEXTURE_SIZE, MARKER_TEXTURE_SIZE);
@@ -355,7 +356,7 @@ public class AtlasMap extends AbstractWidget {
 		double scale = this.blocksPerPixel();
 		double leftBlock = this.centerX - this.width / 2.0 * scale;
 		double topBlock = this.centerZ - this.height / 2.0 * scale;
-		for (AtlasMarker marker : ClientAtlas.getMarkers().reversed()) {
+		for (AtlasMarker marker : ClientHandbook.get().atlas().getMarkers().reversed()) {
 			double x = this.getX() + (marker.x() + 0.5 - leftBlock) / scale - marker.type().getAnchorX() + MARKER_PADDING;
 			double y = this.getY() + (marker.z() + 0.5 - topBlock) / scale - marker.type().getAnchorY() + MARKER_PADDING;
 			if (mouseX >= x && mouseY >= y && mouseX < x + MARKER_SIZE && mouseY < y + MARKER_SIZE) {
