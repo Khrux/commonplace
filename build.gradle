@@ -9,6 +9,10 @@ loom {
 		client {
 			programArgs "--username", "Dev"
 		}
+
+		server {
+			runDir "run-server"
+		}
 	}
 
 	mods {

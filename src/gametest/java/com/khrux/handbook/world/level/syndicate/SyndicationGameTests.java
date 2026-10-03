@@ -21,7 +21,9 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ChunkPos;
@@ -425,6 +427,29 @@ public class SyndicationGameTests {
 		helper.assertTrue(slot(player, 3).isEmpty() && slot(player, 4).hash().equals(first), "swapping with an empty slot moves the passphrase");
 		helper.assertTrue(syndicate(helper, first).getFollowers().containsKey(player.getUUID()) && syndicate(helper, second).getFollowers().containsKey(player.getUUID()), "reordering keeps following both");
 		remove(helper, player);
+		helper.succeed();
+	}
+
+	@GameTest(maxTicks = 100)
+	public void deathKeepsTheBookAndDropsTools(final GameTestHelper helper) {
+		ServerPlayer player = player(helper);
+		String hash = newHash();
+		Syndication.follow(player, 2, hash);
+		player.setAttached(HandbookAttachmentTypes.SPYGLASS_SLOT, new ItemStack(Items.SPYGLASS));
+		player.setAttached(HandbookAttachmentTypes.HANDBOOK_SLOT, new ItemStack(HandbookItems.HANDBOOK));
+		player.setAttached(HandbookAttachmentTypes.NOTEBOOK, List.of(NotePage.EMPTY.withText("kept")));
+		player.die(player.damageSources().genericKill());
+		ServerPlayer respawned = helper.getLevel().getServer().getPlayerList().respawn(player, false, net.minecraft.world.entity.Entity.RemovalReason.KILLED);
+		helper.assertTrue(respawned.getAttachedOrElse(HandbookAttachmentTypes.QUILL_SLOT, ItemStack.EMPTY).isEmpty(), "the quill should drop on death");
+		helper.assertTrue(respawned.getAttachedOrElse(HandbookAttachmentTypes.SPYGLASS_SLOT, ItemStack.EMPTY).isEmpty(), "the spyglass should drop on death");
+		helper.assertTrue(respawned.getAttachedOrElse(HandbookAttachmentTypes.HANDBOOK_SLOT, ItemStack.EMPTY).is(HandbookItems.HANDBOOK), "the Handbook stays in its slot");
+		helper.assertTrue(slot(respawned, 2).hash().equals(hash), "passphrases survive death");
+		helper.assertTrue(respawned.getAttachedOrElse(HandbookAttachmentTypes.NOTEBOOK, List.of()).getFirst().text().equals("kept"), "the personal notebook survives death");
+		helper.assertTrue(
+			!helper.getLevel().getEntities(EntityTypeTest.forClass(ItemEntity.class), entity -> entity.getItem().is(HandbookItems.ENDER_QUILL)).isEmpty(),
+			"the quill should be on the ground"
+		);
+		remove(helper, respawned);
 		helper.succeed();
 	}
 
